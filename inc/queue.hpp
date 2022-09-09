@@ -25,9 +25,9 @@ public:
 
   using container_type  = Container;
   using value_type      = T;
-  using size_type       = container_type::size_type;
-  using reference       = container_type::reference;
-  using const_reference = container_type::const_reference;
+  using size_type       = typename container_type::size_type;
+  using reference       = typename container_type::reference;
+  using const_reference = typename container_type::const_reference;
 
 private:
 
@@ -85,10 +85,15 @@ public:
     return m_container.empty();
   }
 
-  template <typename T>
-  void push(T&& value)
+  [[nodiscard]] auto size() const -> size_type
   {
-    m_container.push_back(std::forward(value));
+    return m_container.size();
+  }
+
+  template <typename data_t>
+  void push(data_t&& value)
+  {
+    m_container.push_back(std::forward<data_t>(value));
   }
 
   template <typename... Pack>
