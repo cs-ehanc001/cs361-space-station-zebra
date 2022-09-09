@@ -1,3 +1,5 @@
+#include <type_traits>
+
 #include "test_queue.h"
 #include "test_utils.hpp"
 
@@ -343,7 +345,11 @@ auto test_emplace() -> ehanc::test
   results.add_case(test.front(), {1, 'a'});
   results.add_case(test.back(), {7, 'd'});
 
-  test.emplace(9, 'e');
+  decltype(auto) val1 {test.emplace(9, 'e')};
+  results.add_case(val1, std::pair(9, 'e'));
+  results.add_case(std::is_same_v<decltype(val1), std::pair<int, char>&>,
+                   true);
+
   results.add_case(test.empty(), false);
   results.add_case(test.size(), 5_z);
   results.add_case(test.front(), {1, 'a'});
@@ -372,7 +378,10 @@ auto test_emplace() -> ehanc::test
   results.add_case(test.front(), {9, 'e'});
   results.add_case(test.back(), {9, 'e'});
 
-  test.emplace(11, 'f');
+  decltype(auto) val2 {test.emplace(11, 'f')};
+  results.add_case(val2, std::pair(11, 'f'));
+  results.add_case(std::is_same_v<decltype(val2), std::pair<int, char>&>,
+                   true);
 
   results.add_case(test.empty(), false);
   results.add_case(test.size(), 2_z);
@@ -388,6 +397,12 @@ auto test_emplace() -> ehanc::test
 
   results.add_case(test.empty(), true);
   results.add_case(test.size(), 0_z);
+
+  results.add_case(
+      std::is_same_v<decltype(test.emplace(
+                         std::declval<std::pair<int, char>>())),
+                     std::pair<int, char>&>,
+      true);
 
   return results;
 }

@@ -41,9 +41,9 @@ public:
 
   auto operator=(const queue& rhs) -> queue& = default;
 
-  queue(queue&& other) = default;
+  queue(queue&& other) noexcept = default;
 
-  auto operator=(queue&& rhs) -> queue& = default;
+  auto operator=(queue&& rhs) noexcept -> queue& = default;
 
   ~queue() = default;
 
@@ -97,9 +97,9 @@ public:
   }
 
   template <typename... Pack>
-  decltype(auto) emplace(Pack&&... pack)
+  auto emplace(Pack&&... pack) -> decltype(auto)
   {
-    m_container.emplace_back(std::forward<Pack>(pack)...);
+    return m_container.emplace_back(std::forward<Pack>(pack)...);
   }
 
   void pop()
