@@ -78,16 +78,16 @@ tst/bin/test: tst/bin tst/obj tst/obj/maintest.o tst/obj/test_queue.o obj/main.o
 	@$(CXX) -o $@ tst/obj/*.o $(CXXFLAGS)
 	@ln -sf tst/bin/test ./run_tests
 
-obj/main.o: src/main.cpp src/main.cpp
+obj/main.o: src/main.cpp inc/constants.h
 	@printf "\033[1;32mBuilding object\t $@\033[1;0m\n"
 	@$(CXX) -c -o $@ $< -Iinc $(CXXFLAGS)
 	@ln -sf ../../obj/main.o tst/obj/main.o
 
-asm/main.s: src/main.cpp src/main.cpp
+asm/main.s: src/main.cpp inc/constants.h
 	@printf "\033[1;32mGenerating\t $@\033[1;0m\n"
 	@$(CXX) -S -o $@ $< -Iinc $(CXXFLAGS)
 
-pre/main.ii: src/main.cpp src/main.cpp
+pre/main.ii: src/main.cpp inc/constants.h
 	@printf "\033[1;32mPreprocessing\t $@\033[1;0m\n"
 	@$(CXX) -E -o $@ $< -Iinc $(CXXFLAGS)
 
