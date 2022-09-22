@@ -38,10 +38,10 @@ docopen: doc
 all: tags exe assembly preprocess doc test
 
 .PHONY: assembly
-assembly: asm asm/random.s asm/main.s
+assembly: asm asm/ship.s asm/main.s
 
 .PHONY: preprocess
-preprocess: pre pre/random.ii pre/main.ii
+preprocess: pre pre/ship.ii pre/main.ii
 
 asm:
 	@mkdir -p asm
@@ -67,27 +67,27 @@ clean:
 	@rm -f obj/* bin/* tst/obj/* tst/bin/*
 	@rm -rf asm pre doc/html
 
-$(EXE): obj/random.o obj/main.o
+$(EXE): obj/ship.o obj/main.o
 	@printf "\033[1;32mLinking\t\t $(EXE)\033[1;0m\n"
 	@$(CXX) -o $@ $^ $(CXXFLAGS)
 	@ln -sf $(EXE) ./run
 
-tst/bin/test: tst/bin tst/obj tst/obj/maintest.o tst/obj/test_queue.o tst/obj/test_random.o obj/random.o obj/main.o
+tst/bin/test: tst/bin tst/obj tst/obj/maintest.o tst/obj/test_ship.o tst/obj/test_random.o obj/ship.o obj/main.o
 	@printf "\033[1;32mLinking\t\t tst/bin/test\033[1;0m\n"
 	@rm -f tst/obj/main.o
 	@$(CXX) -o $@ tst/obj/*.o $(CXXFLAGS)
 	@ln -sf tst/bin/test ./run_tests
 
-obj/random.o: src/random.cpp inc/random.h tst/obj
+obj/ship.o: src/ship.cpp inc/random.hpp inc/constants.h inc/ship.h tst/obj
 	@printf "\033[1;32mBuilding object\t $@\033[1;0m\n"
 	@$(CXX) -c -o $@ $< -Iinc $(CXXFLAGS)
-	@ln -sf ../../obj/random.o tst/obj/random.o
+	@ln -sf ../../obj/ship.o tst/obj/ship.o
 
-asm/random.s: src/random.cpp inc/random.h
+asm/ship.s: src/ship.cpp inc/random.hpp inc/constants.h inc/ship.h
 	@printf "\033[1;32mGenerating\t $@\033[1;0m\n"
 	@$(CXX) -S -o $@ $< -Iinc $(CXXFLAGS)
 
-pre/random.ii: src/random.cpp inc/random.h
+pre/ship.ii: src/ship.cpp inc/random.hpp inc/constants.h inc/ship.h
 	@printf "\033[1;32mPreprocessing\t $@\033[1;0m\n"
 	@$(CXX) -E -o $@ $< -Iinc $(CXXFLAGS)
 
@@ -104,14 +104,14 @@ pre/main.ii: src/main.cpp inc/constants.h
 	@printf "\033[1;32mPreprocessing\t $@\033[1;0m\n"
 	@$(CXX) -E -o $@ $< -Iinc $(CXXFLAGS)
 
-tst/obj/maintest.o: tst/src/maintest.cpp tst/inc/test_queue.h inc/queue.hpp inc/list.hpp inc/utils/metaprogramming.hpp tst/inc/test_utils.hpp inc/utils/etc.hpp inc/utils/algorithm.hpp inc/utils/metaprogramming.hpp inc/utils/term_colors.h tst/obj
+tst/obj/maintest.o: tst/src/maintest.cpp tst/inc/test_utils.hpp inc/utils/etc.hpp inc/utils/algorithm.hpp inc/utils/metaprogramming.hpp inc/utils/term_colors.h tst/obj
 	@printf "\033[1;32mBuilding object\t $@\033[1;0m\n"
 	@$(CXX) -c -o $@ $< -Iinc -Itst/inc $(CXXFLAGS)
 
-tst/obj/test_queue.o: tst/src/test_queue.cpp tst/inc/test_queue.h inc/queue.hpp inc/list.hpp inc/utils/metaprogramming.hpp tst/inc/test_utils.hpp inc/utils/etc.hpp inc/utils/algorithm.hpp inc/utils/metaprogramming.hpp inc/utils/term_colors.h tst/obj
+tst/obj/test_ship.o: tst/src/test_ship.cpp tst/inc/test_ship.h inc/ship.h inc/constants.h tst/inc/test_utils.hpp inc/utils/etc.hpp inc/utils/algorithm.hpp inc/utils/metaprogramming.hpp inc/utils/term_colors.h tst/obj
 	@printf "\033[1;32mBuilding object\t $@\033[1;0m\n"
 	@$(CXX) -c -o $@ $< -Iinc -Itst/inc $(CXXFLAGS)
 
-tst/obj/test_random.o: tst/src/test_random.cpp tst/inc/test_random.h inc/random.h tst/inc/test_utils.hpp inc/utils/etc.hpp inc/utils/algorithm.hpp inc/utils/metaprogramming.hpp inc/utils/term_colors.h tst/obj
+tst/obj/test_random.o: tst/src/test_random.cpp tst/inc/test_random.h inc/random.hpp inc/constants.h tst/inc/test_utils.hpp inc/utils/etc.hpp inc/utils/algorithm.hpp inc/utils/metaprogramming.hpp inc/utils/term_colors.h tst/obj
 	@printf "\033[1;32mBuilding object\t $@\033[1;0m\n"
 	@$(CXX) -c -o $@ $< -Iinc -Itst/inc $(CXXFLAGS)

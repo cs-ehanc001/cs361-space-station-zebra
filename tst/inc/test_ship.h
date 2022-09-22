@@ -3,5 +3,6 @@
 
 #include "ship.h"
 
+void test_ship();
 
 #endif

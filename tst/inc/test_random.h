@@ -1,7 +1,6 @@
-#ifndef TEST_RANDOM_H
-#define TEST_RANDOM_H
+#ifndef TEST_RANDOM_HPP
+#define TEST_RANDOM_HPP
 
-#include "random.h"
-
+#include "random.hpp"
 
 #endif

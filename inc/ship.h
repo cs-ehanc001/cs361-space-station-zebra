@@ -1,11 +1,9 @@
 #ifndef SHIP_H
 #define SHIP_H
 
-#include <numeric>
+#include <list>
 
 #include "constants.h"
-#include "list.hpp"
-#include "random.h"
 
 class ship
 {
@@ -13,30 +11,42 @@ public:
 
   enum class faction { human, ferengi, klingon, romulan, other };
 
-private:
-
   struct part {
     int id;
     int damage;
+
+    part(int id_arg, int damage_arg)
+        : id(id_arg)
+        , damage(damage_arg)
+    {}
   };
+
+private:
 
   int m_id;
 
   faction m_faction;
 
-  ehanc::list<part> m_damaged_parts;
+  std::list<part> m_damaged_parts;
 
-  static auto get_damaged_part_list(faction fact) noexcept
-      -> ehanc::list<part>;
+  /* {{{ doc */
+  /**
+   * @brief Creates a valid damaged part list for a faction.
+   *
+   * @param fact Faction for which to create a list of valid damaged parts
+   */
+  /* }}} */
+  static auto create_damaged_part_list(faction fact) noexcept
+      -> std::list<part>;
 
 public:
 
   ship() = delete;
 
-  ship(faction fact)
+  ship(faction fact) noexcept
       : m_id {}
       , m_faction {fact}
-      , m_damaged_parts {get_damaged_part_list(fact)}
+      , m_damaged_parts {create_damaged_part_list(fact)}
   {
     static int next_id {conf::starting_ship_id};
     m_id = next_id;
@@ -45,11 +55,11 @@ public:
 
   ship(const ship& src) noexcept;
 
-  auto operator=(const ship& rhs) -> ship& noexcept;
+  auto operator=(const ship& rhs) noexcept -> ship&;
 
   ship(ship&& src) noexcept;
 
-  auto operator=(ship&& rhs) -> ship& noexcept;
+  auto operator=(ship&& rhs) noexcept -> ship&;
 
   ~ship() noexcept = default;
 
@@ -78,6 +88,21 @@ public:
   inline void repair() noexcept
   {
     m_damaged_parts.clear();
+  }
+
+  inline auto get_faction() const noexcept -> faction
+  {
+    return m_faction;
+  }
+
+  inline auto get_damaged_part_count() const noexcept -> std::size_t
+  {
+    return m_damaged_parts.size();
+  }
+
+  inline auto get_id() const noexcept -> int
+  {
+    return m_id;
   }
 };
 
