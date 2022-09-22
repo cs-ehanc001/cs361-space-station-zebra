@@ -9,7 +9,7 @@ auto ship::construct_random_ship() noexcept -> ship
 {
   faction random_faction {get_random_faction()};
 
-  return ship(random_faction);
+  return {random_faction};
 }
 
 auto ship::get_total_damage() const noexcept -> int
@@ -35,7 +35,7 @@ create_damaged_part_list_helper(const Itr begin, const Itr end,
 
   std::vector<int> selected_part_ids(broken_part_count);
 
-  selected_part_ids.push_back(*random_select(begin, end));
+  selected_part_ids.emplace_back(*random_select(begin, end));
 
   while ( selected_part_ids.size() != broken_part_count ) {
     int selected_id {*random_select(begin, end)};
@@ -54,8 +54,7 @@ create_damaged_part_list_helper(const Itr begin, const Itr end,
 
   std::for_each(selected_part_ids.cbegin(), selected_part_ids.cend(),
                 [&retval, &sev_dist](int id) noexcept {
-                  retval.push_back(
-                      ship::part(id, sev_dist(random_engine())));
+                  retval.emplace_back(id, sev_dist(random_engine()));
                 });
 
   return retval;

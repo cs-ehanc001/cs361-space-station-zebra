@@ -15,7 +15,8 @@ public:
     int id;
     int damage;
 
-    part(int id_arg, int damage_arg)
+    // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
+    part(int id_arg, int damage_arg) // It must be this way
         : id(id_arg)
         , damage(damage_arg)
     {}
@@ -81,16 +82,16 @@ public:
    * @brief Get sum of all damage values of all parts.
    */
   /* }}} */
-  auto get_total_damage() const noexcept -> int;
+  [[nodiscard]] auto get_total_damage() const noexcept -> int;
 
   /* {{{ doc */
   /**
    * @brief Determines if ship is damaged.
    */
   /* }}} */
-  inline auto is_damaged() const noexcept -> bool
+  [[nodiscard]] inline auto is_damaged() const noexcept -> bool
   {
-    return m_damaged_parts.size() == 0;
+    return m_damaged_parts.empty();
   }
 
   /* {{{ doc */
@@ -103,17 +104,18 @@ public:
     m_damaged_parts.clear();
   }
 
-  inline auto get_faction() const noexcept -> faction
+  [[nodiscard]] inline auto get_faction() const noexcept -> faction
   {
     return m_faction;
   }
 
-  inline auto get_damaged_part_count() const noexcept -> std::size_t
+  [[nodiscard]] inline auto get_damaged_part_count() const noexcept
+      -> std::size_t
   {
     return m_damaged_parts.size();
   }
 
-  inline auto get_id() const noexcept -> int
+  [[nodiscard]] inline auto get_id() const noexcept -> int
   {
     return m_id;
   }
