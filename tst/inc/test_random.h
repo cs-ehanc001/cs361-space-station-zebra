@@ -3,4 +3,6 @@
 
 #include "random.hpp"
 
+void test_random();
+
 #endif
