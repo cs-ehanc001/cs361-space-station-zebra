@@ -3,6 +3,12 @@
 
 #include <random>
 
-auto random_engine() -> std::mt19937&;
+/* {{{ doc */
+/**
+ * @brief Returns a random engine. Exists to avoid constructing multiple
+ * random engines.
+ */
+/* }}} */
+auto random_engine() noexcept -> std::mt19937&;
 
 #endif

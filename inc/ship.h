@@ -5,8 +5,7 @@
 
 #include "constants.h"
 #include "list.hpp"
-
-namespace zebra {
+#include "random.h"
 
 class ship
 {
@@ -27,7 +26,8 @@ private:
 
   ehanc::list<part> m_damaged_parts;
 
-  void p_create_damage();
+  static auto get_damaged_part_list(faction fact) noexcept
+      -> ehanc::list<part>;
 
 public:
 
@@ -58,18 +58,7 @@ public:
    * @brief Get sum of all damage values of all parts.
    */
   /* }}} */
-  inline auto get_total_damage() const noexcept -> int
-  {
-    if ( this->is_damaged() ) {
-      return std::accumulate(m_damaged_parts.cbegin(),
-                             m_damaged_parts.cend(), 0,
-                             [](int acc, const part arg) noexcept {
-                               return acc + arg.damage;
-                             });
-    } else {
-      return 0;
-    }
-  }
+  auto get_total_damage() const noexcept -> int;
 
   /* {{{ doc */
   /**
@@ -91,7 +80,5 @@ public:
     m_damaged_parts.clear();
   }
 };
-
-} // namespace zebra
 
 #endif
