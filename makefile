@@ -32,7 +32,7 @@ doc:
 
 .PHONY: docopen
 docopen: doc
-	@firefox -new-window doc/html/index.html >/dev/null 2>&1 & disown
+	@firefox -new-window doc/html/index.html >/dev/null 2>&1
 
 .PHONY: all
 all: tags exe assembly preprocess doc test
@@ -78,7 +78,7 @@ tst/bin/test: tst/bin tst/obj tst/obj/maintest.o tst/obj/test_queue.o tst/obj/te
 	@$(CXX) -o $@ tst/obj/*.o $(CXXFLAGS)
 	@ln -sf tst/bin/test ./run_tests
 
-obj/random.o: src/random.cpp inc/random.h
+obj/random.o: src/random.cpp inc/random.h tst/obj
 	@printf "\033[1;32mBuilding object\t $@\033[1;0m\n"
 	@$(CXX) -c -o $@ $< -Iinc $(CXXFLAGS)
 	@ln -sf ../../obj/random.o tst/obj/random.o
@@ -91,7 +91,7 @@ pre/random.ii: src/random.cpp inc/random.h
 	@printf "\033[1;32mPreprocessing\t $@\033[1;0m\n"
 	@$(CXX) -E -o $@ $< -Iinc $(CXXFLAGS)
 
-obj/main.o: src/main.cpp inc/constants.h
+obj/main.o: src/main.cpp inc/constants.h tst/obj
 	@printf "\033[1;32mBuilding object\t $@\033[1;0m\n"
 	@$(CXX) -c -o $@ $< -Iinc $(CXXFLAGS)
 	@ln -sf ../../obj/main.o tst/obj/main.o
@@ -104,14 +104,14 @@ pre/main.ii: src/main.cpp inc/constants.h
 	@printf "\033[1;32mPreprocessing\t $@\033[1;0m\n"
 	@$(CXX) -E -o $@ $< -Iinc $(CXXFLAGS)
 
-tst/obj/maintest.o: tst/src/maintest.cpp tst/inc/test_queue.h inc/queue.hpp inc/list.hpp inc/utils/metaprogramming.hpp tst/inc/test_utils.hpp inc/utils/etc.hpp inc/utils/algorithm.hpp inc/utils/metaprogramming.hpp inc/utils/term_colors.h
+tst/obj/maintest.o: tst/src/maintest.cpp tst/inc/test_queue.h inc/queue.hpp inc/list.hpp inc/utils/metaprogramming.hpp tst/inc/test_utils.hpp inc/utils/etc.hpp inc/utils/algorithm.hpp inc/utils/metaprogramming.hpp inc/utils/term_colors.h tst/obj
 	@printf "\033[1;32mBuilding object\t $@\033[1;0m\n"
 	@$(CXX) -c -o $@ $< -Iinc -Itst/inc $(CXXFLAGS)
 
-tst/obj/test_queue.o: tst/src/test_queue.cpp tst/inc/test_queue.h inc/queue.hpp inc/list.hpp inc/utils/metaprogramming.hpp tst/inc/test_utils.hpp inc/utils/etc.hpp inc/utils/algorithm.hpp inc/utils/metaprogramming.hpp inc/utils/term_colors.h
+tst/obj/test_queue.o: tst/src/test_queue.cpp tst/inc/test_queue.h inc/queue.hpp inc/list.hpp inc/utils/metaprogramming.hpp tst/inc/test_utils.hpp inc/utils/etc.hpp inc/utils/algorithm.hpp inc/utils/metaprogramming.hpp inc/utils/term_colors.h tst/obj
 	@printf "\033[1;32mBuilding object\t $@\033[1;0m\n"
 	@$(CXX) -c -o $@ $< -Iinc -Itst/inc $(CXXFLAGS)
 
-tst/obj/test_random.o: tst/src/test_random.cpp tst/inc/test_random.h inc/random.h tst/inc/test_utils.hpp inc/utils/etc.hpp inc/utils/algorithm.hpp inc/utils/metaprogramming.hpp inc/utils/term_colors.h
+tst/obj/test_random.o: tst/src/test_random.cpp tst/inc/test_random.h inc/random.h tst/inc/test_utils.hpp inc/utils/etc.hpp inc/utils/algorithm.hpp inc/utils/metaprogramming.hpp inc/utils/term_colors.h tst/obj
 	@printf "\033[1;32mBuilding object\t $@\033[1;0m\n"
 	@$(CXX) -c -o $@ $< -Iinc -Itst/inc $(CXXFLAGS)
