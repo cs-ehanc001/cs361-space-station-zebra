@@ -5,6 +5,13 @@
 #include "random.hpp"
 #include "ship.h"
 
+auto ship::construct_random_ship() noexcept -> ship
+{
+  faction random_faction {get_random_faction()};
+
+  return ship(random_faction);
+}
+
 auto ship::get_total_damage() const noexcept -> int
 {
   if ( this->is_damaged() ) {

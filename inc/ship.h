@@ -43,6 +43,17 @@ public:
 
   ship() = delete;
 
+  /* {{{ doc */
+  /**
+   * @brief Ensures a ship is constructed in a valid state.
+   * A valid state being: having the next ID number,
+   * having a faction, and beginning in a damaged state.
+   * However, constructing with ship::construct_random_ship() is
+   * greatly preferred.
+   *
+   * @param fact Faction of the ship to construct.
+   */
+  /* }}} */
   ship(faction fact) noexcept
       : m_id {}
       , m_faction {fact}
@@ -62,6 +73,8 @@ public:
   auto operator=(ship&& rhs) noexcept -> ship&;
 
   ~ship() noexcept = default;
+
+  static auto construct_random_ship() noexcept -> ship;
 
   /* {{{ doc */
   /**
