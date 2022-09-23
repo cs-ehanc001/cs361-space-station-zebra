@@ -1,6 +1,10 @@
 #include <algorithm>
 #include <deque>
+#include <numeric>
+#include <sstream>
 #include <string>
+
+#include "utils/etc.hpp"
 
 #include "constants.h"
 #include "test_random.h"
@@ -14,7 +18,7 @@ auto test_get_part_count() -> ehanc::test
 
   std::deque<test_value_t> test_values;
 
-  const std::size_t num_samples {1000000};
+  const std::size_t num_samples {1'000'000};
 
   for ( std::size_t i {0}; i < num_samples; ++i ) {
     test_values.push_back(static_cast<long>(get_part_count()));
@@ -54,7 +58,52 @@ auto test_get_part_count() -> ehanc::test
   return results;
 }
 
+auto test_random_select() -> ehanc::test
+{
+  ehanc::test results;
+
+  const int range_max {20};
+  const std::size_t num_samples {1'000'000};
+
+  // Fudge factor for how often a particular value is selected
+  // Any element may be selected
+  // ((num_samples / range_max) +- count_fudge_factor) times
+  const int count_fudge_factor {700};
+
+  std::vector<int> range(range_max);
+  std::iota(range.begin(), range.end(),
+            1); // fill range with [1, range_max]
+
+  std::deque<int> samples;
+  for ( std::size_t i {0}; i < num_samples; ++i ) {
+    samples.push_back(*random_select(range.cbegin(), range.cend()));
+  }
+
+  using count_t = typename std::iterator_traits<
+      std::vector<int>::const_iterator>::difference_type;
+
+  for ( const auto val : range ) {
+    // Number of times val occures in samples
+    count_t num_occurances {
+        std::count(samples.cbegin(), samples.cend(), val)};
+    count_t expected_occurances {num_samples / range_max};
+
+    std::stringstream message;
+    message << "Expected " << expected_occurances << " +- "
+            << count_fudge_factor << " occurances of " << val << ", got "
+            << num_occurances << " occurances.";
+
+    bool is_good_count {std::abs(expected_occurances - num_occurances)
+                        < count_fudge_factor};
+
+    results.add_case(is_good_count, true, message.str());
+  }
+
+  return results;
+}
+
 void test_random()
 {
   ehanc::run_test("get_part_count", &test_get_part_count);
+  ehanc::run_test("random_select", &test_random_select);
 }
