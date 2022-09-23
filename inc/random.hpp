@@ -30,7 +30,7 @@ inline auto get_part_count() noexcept -> int
   int generated {static_cast<int>(broken_part_dist(random_engine()))};
 
   // ensure return value >= 1
-  return std::max(generated, 1);
+  return std::max(generated, conf::broken_part_count_min);
 }
 
 /* {{{ doc */
