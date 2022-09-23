@@ -68,7 +68,7 @@ auto test_random_select() -> ehanc::test
   // Fudge factor for how often a particular value is selected
   // Any element may be selected
   // ((num_samples / range_max) +- count_fudge_factor) times
-  const int count_fudge_factor {700};
+  const int count_fudge_factor {800};
 
   // fill range with [1, range_max]
   std::vector<int> range(range_max);
@@ -107,7 +107,7 @@ auto test_get_random_faction() -> ehanc::test
   ehanc::test results;
 
   const int num_samples {1'000'000};
-  const double chance_fudge_factor {3.0};
+  const double chance_fudge_factor {1.5};
 
   using count_t = typename std::iterator_traits<
       std::deque<ship::faction>::const_iterator>::difference_type;
