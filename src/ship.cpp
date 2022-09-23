@@ -5,24 +5,6 @@
 #include "random.hpp"
 #include "ship.h"
 
-auto ship::construct_random_ship() noexcept -> ship
-{
-  faction random_faction {get_random_faction()};
-
-  return {random_faction};
-}
-
-auto ship::get_total_damage() const noexcept -> int
-{
-  if ( this->is_damaged() ) {
-    return std::accumulate(
-        m_damaged_parts.cbegin(), m_damaged_parts.cend(), 0,
-        [](int acc, const part arg) noexcept { return acc + arg.damage; });
-  } else {
-    return 0;
-  }
-}
-
 template <typename Itr>
 static auto
 create_damaged_part_list_helper(const Itr begin, const Itr end,
@@ -99,5 +81,23 @@ auto ship::create_damaged_part_list(ship::faction fact) noexcept
 
     // should not be reachable
     return {};
+  }
+}
+
+auto ship::construct_random_ship() noexcept -> ship
+{
+  faction random_faction {get_random_faction()};
+
+  return {random_faction};
+}
+
+auto ship::get_total_damage() const noexcept -> int
+{
+  if ( this->is_damaged() ) {
+    return std::accumulate(
+        m_damaged_parts.cbegin(), m_damaged_parts.cend(), 0,
+        [](int acc, const part arg) noexcept { return acc + arg.damage; });
+  } else {
+    return 0;
   }
 }
