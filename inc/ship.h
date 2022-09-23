@@ -30,6 +30,8 @@ private:
 
   std::list<part> m_damaged_parts;
 
+public:
+
   /* {{{ doc */
   /**
    * @brief Creates a valid damaged part list for a faction.
@@ -39,8 +41,6 @@ private:
   /* }}} */
   static auto create_damaged_part_list(faction fact) noexcept
       -> std::list<part>;
-
-public:
 
   ship() = delete;
 

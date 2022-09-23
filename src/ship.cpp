@@ -2,6 +2,8 @@
 #include <numeric>
 #include <vector>
 
+#include "utils/algorithm.hpp"
+
 #include "random.hpp"
 #include "ship.h"
 
@@ -15,7 +17,7 @@ create_damaged_part_list_helper(const Itr begin, const Itr end,
   std::size_t broken_part_count {
       static_cast<std::size_t>(get_part_count())};
 
-  std::vector<int> selected_part_ids(broken_part_count);
+  std::vector<int> selected_part_ids;
 
   selected_part_ids.emplace_back(*random_select(begin, end));
 
@@ -23,9 +25,8 @@ create_damaged_part_list_helper(const Itr begin, const Itr end,
     int selected_id {*random_select(begin, end)};
 
     // if selected_id not already in selected_part_ids
-    if ( std::find(selected_part_ids.cbegin(), selected_part_ids.cend(),
-                   selected_id)
-         != selected_part_ids.cend() ) {
+    if ( !ehanc::contains(selected_part_ids.cbegin(),
+                          selected_part_ids.cend(), selected_id) ) {
       selected_part_ids.push_back(selected_id);
     }
   }
