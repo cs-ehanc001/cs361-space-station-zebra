@@ -12,7 +12,7 @@ EXE=bin/$(PROJNAME)
 default: tags exe test
 
 .PHONY: exe
-exe: bin obj $(EXE)
+exe: tst/obj bin obj $(EXE)
 
 .PHONY: test
 test: tst/bin/test
@@ -78,20 +78,20 @@ tst/bin/test: tst/bin tst/obj tst/obj/maintest.o tst/obj/test_ship.o tst/obj/tes
 	@$(CXX) -o $@ tst/obj/*.o $(CXXFLAGS)
 	@ln -sf tst/bin/test ./run_tests
 
-obj/ship.o: src/ship.cpp inc/random.hpp inc/constants.h inc/ship.h tst/obj
+obj/ship.o: src/ship.cpp inc/random.hpp inc/constants.h inc/ship.h inc/ship.h
 	@printf "\033[1;32mBuilding object\t $@\033[1;0m\n"
 	@$(CXX) -c -o $@ $< -Iinc $(CXXFLAGS)
 	@ln -sf ../../obj/ship.o tst/obj/ship.o
 
-asm/ship.s: src/ship.cpp inc/random.hpp inc/constants.h inc/ship.h
+asm/ship.s: src/ship.cpp inc/random.hpp inc/constants.h inc/ship.h inc/ship.h
 	@printf "\033[1;32mGenerating\t $@\033[1;0m\n"
 	@$(CXX) -S -o $@ $< -Iinc $(CXXFLAGS)
 
-pre/ship.ii: src/ship.cpp inc/random.hpp inc/constants.h inc/ship.h
+pre/ship.ii: src/ship.cpp inc/random.hpp inc/constants.h inc/ship.h inc/ship.h
 	@printf "\033[1;32mPreprocessing\t $@\033[1;0m\n"
 	@$(CXX) -E -o $@ $< -Iinc $(CXXFLAGS)
 
-obj/main.o: src/main.cpp inc/constants.h tst/obj
+obj/main.o: src/main.cpp inc/constants.h
 	@printf "\033[1;32mBuilding object\t $@\033[1;0m\n"
 	@$(CXX) -c -o $@ $< -Iinc $(CXXFLAGS)
 	@ln -sf ../../obj/main.o tst/obj/main.o
@@ -104,14 +104,14 @@ pre/main.ii: src/main.cpp inc/constants.h
 	@printf "\033[1;32mPreprocessing\t $@\033[1;0m\n"
 	@$(CXX) -E -o $@ $< -Iinc $(CXXFLAGS)
 
-tst/obj/maintest.o: tst/src/maintest.cpp tst/inc/test_utils.hpp inc/utils/etc.hpp inc/utils/algorithm.hpp inc/utils/metaprogramming.hpp inc/utils/term_colors.h tst/obj
+tst/obj/maintest.o: tst/src/maintest.cpp tst/inc/test_utils.hpp inc/utils/etc.hpp inc/utils/algorithm.hpp inc/utils/metaprogramming.hpp inc/utils/term_colors.h tst/inc/test_random.h inc/random.hpp inc/constants.h inc/ship.h tst/inc/test_ship.h inc/ship.h
 	@printf "\033[1;32mBuilding object\t $@\033[1;0m\n"
 	@$(CXX) -c -o $@ $< -Iinc -Itst/inc $(CXXFLAGS)
 
-tst/obj/test_ship.o: tst/src/test_ship.cpp tst/inc/test_ship.h inc/ship.h inc/constants.h tst/inc/test_utils.hpp inc/utils/etc.hpp inc/utils/algorithm.hpp inc/utils/metaprogramming.hpp inc/utils/term_colors.h tst/obj
+tst/obj/test_ship.o: tst/src/test_ship.cpp tst/inc/test_ship.h inc/ship.h inc/constants.h tst/inc/test_utils.hpp inc/utils/etc.hpp inc/utils/algorithm.hpp inc/utils/metaprogramming.hpp inc/utils/term_colors.h
 	@printf "\033[1;32mBuilding object\t $@\033[1;0m\n"
 	@$(CXX) -c -o $@ $< -Iinc -Itst/inc $(CXXFLAGS)
 
-tst/obj/test_random.o: tst/src/test_random.cpp tst/inc/test_random.h inc/random.hpp inc/constants.h tst/inc/test_utils.hpp inc/utils/etc.hpp inc/utils/algorithm.hpp inc/utils/metaprogramming.hpp inc/utils/term_colors.h tst/obj
+tst/obj/test_random.o: tst/src/test_random.cpp inc/utils/etc.hpp inc/utils/algorithm.hpp inc/utils/metaprogramming.hpp inc/constants.h tst/inc/test_random.h inc/random.hpp inc/constants.h inc/ship.h tst/inc/test_utils.hpp inc/utils/term_colors.h
 	@printf "\033[1;32mBuilding object\t $@\033[1;0m\n"
 	@$(CXX) -c -o $@ $< -Iinc -Itst/inc $(CXXFLAGS)

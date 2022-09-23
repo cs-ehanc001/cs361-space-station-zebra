@@ -70,9 +70,9 @@ auto test_random_select() -> ehanc::test
   // ((num_samples / range_max) +- count_fudge_factor) times
   const int count_fudge_factor {700};
 
+  // fill range with [1, range_max]
   std::vector<int> range(range_max);
-  std::iota(range.begin(), range.end(),
-            1); // fill range with [1, range_max]
+  std::iota(range.begin(), range.end(), 1);
 
   std::deque<int> samples;
   for ( std::size_t i {0}; i < num_samples; ++i ) {
@@ -102,8 +102,83 @@ auto test_random_select() -> ehanc::test
   return results;
 }
 
+auto test_get_random_faction() -> ehanc::test
+{
+  ehanc::test results;
+
+  const int num_samples {1'000'000};
+  const double chance_fudge_factor {3.0};
+
+  using count_t = typename std::iterator_traits<
+      std::deque<ship::faction>::const_iterator>::difference_type;
+  std::deque<ship::faction> samples;
+
+  for ( std::size_t i {0}; i < num_samples; ++i ) {
+    samples.push_back(get_random_faction());
+  }
+
+  const count_t human_count {
+      std::count(samples.cbegin(), samples.cend(), ship::faction::human)};
+  const count_t ferengi_count {std::count(samples.cbegin(), samples.cend(),
+                                          ship::faction::ferengi)};
+  const count_t klingon_count {std::count(samples.cbegin(), samples.cend(),
+                                          ship::faction::klingon)};
+  const count_t romulan_count {std::count(samples.cbegin(), samples.cend(),
+                                          ship::faction::romulan)};
+  const count_t other_count {
+      std::count(samples.cbegin(), samples.cend(), ship::faction::other)};
+
+  auto case_adder {[&](const count_t count, const ship::faction type,
+                       int expected_chance) {
+    auto faction_to_string {
+        [](const ship::faction fact) -> std::string_view {
+          switch ( fact ) {
+          case ship::faction::human:
+            return "human";
+          case ship::faction::ferengi:
+            return "ferengi";
+          case ship::faction::klingon:
+            return "klingon";
+          case ship::faction::romulan:
+            return "romulan";
+          case ship::faction::other:
+            return "other";
+          default:
+            return "Something has gone horribly wrong";
+          }
+        }};
+
+    double apparent_chance {
+        (static_cast<double>(count) / static_cast<double>(num_samples))
+        * 100};
+
+    std::stringstream message;
+    message << "Expected " << expected_chance << "% "
+            << faction_to_string(type) << ", but got " << apparent_chance
+            << "%";
+
+    bool is_good_chance {
+        std::abs(static_cast<double>(expected_chance) - apparent_chance)
+        < chance_fudge_factor};
+
+    results.add_case(is_good_chance, true, message.str());
+  }};
+
+  case_adder(human_count, ship::faction::human, conf::human_ship_chance);
+  case_adder(ferengi_count, ship::faction::ferengi,
+             conf::ferengi_ship_chance);
+  case_adder(klingon_count, ship::faction::klingon,
+             conf::klingon_ship_chance);
+  case_adder(romulan_count, ship::faction::romulan,
+             conf::romulan_ship_chance);
+  case_adder(other_count, ship::faction::other, conf::other_ship_chance);
+
+  return results;
+}
+
 void test_random()
 {
   ehanc::run_test("get_part_count", &test_get_part_count);
   ehanc::run_test("random_select", &test_random_select);
+  ehanc::run_test("get_random_faction", &test_get_random_faction);
 }
