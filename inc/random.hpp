@@ -78,22 +78,26 @@ inline auto get_random_faction() -> ship::faction
 
   int random {fact_dist(random_engine())};
 
-  if ( random < 50 ) {
+  if ( random < conf::human_ship_chance ) {
 
     // 50% chance
     return ship::faction::human;
 
-  } else if ( random < 65 ) {
+  } else if ( random
+              < conf::human_ship_chance + conf::ferengi_ship_chance ) {
 
     // 65 - 50 = 50% chance
     return ship::faction::ferengi;
 
-  } else if ( random < 75 ) {
+  } else if ( random < conf::human_ship_chance + conf::ferengi_ship_chance
+                           + conf::klingon_ship_chance ) {
 
     // 75 - 65 = 10% chance
     return ship::faction::klingon;
 
-  } else if ( random < 80 ) {
+  } else if ( random < conf::human_ship_chance + conf::ferengi_ship_chance
+                           + conf::klingon_ship_chance
+                           + conf::romulan_ship_chance ) {
 
     // 80 - 75 = 5% chance
     return ship::faction::romulan;
@@ -103,6 +107,32 @@ inline auto get_random_faction() -> ship::faction
     // 100 - 80 = 20% chance
     return ship::faction::other;
   }
+
+  /* if ( random < 50 ) { */
+
+  /*   // 50% chance */
+  /*   return ship::faction::human; */
+
+  /* } else if ( random < 65 ) { */
+
+  /*   // 65 - 50 = 50% chance */
+  /*   return ship::faction::ferengi; */
+
+  /* } else if ( random < 75 ) { */
+
+  /*   // 75 - 65 = 10% chance */
+  /*   return ship::faction::klingon; */
+
+  /* } else if ( random < 80 ) { */
+
+  /*   // 80 - 75 = 5% chance */
+  /*   return ship::faction::romulan; */
+
+  /* } else { */
+
+  /*   // 100 - 80 = 20% chance */
+  /*   return ship::faction::other; */
+  /* } */
 }
 
 #endif
