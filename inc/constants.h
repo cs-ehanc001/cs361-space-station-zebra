@@ -33,7 +33,7 @@ constexpr inline int other_severity_min {1};
 constexpr inline int other_severity_max {10};
 
 constexpr inline double broken_part_count_mean {7.0};
-constexpr inline double broken_part_count_stddev {1.0};
+constexpr inline double broken_part_count_stddev {3.0};
 
 constexpr auto severity_to_time(int severity) noexcept -> int
 {
