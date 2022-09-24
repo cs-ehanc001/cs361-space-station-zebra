@@ -67,9 +67,9 @@ public:
 
   ship(const ship& src) noexcept = default;
 
-  auto operator=(const ship& rhs) noexcept -> ship& = default;
+  auto operator=(const ship& rhs) -> ship& = delete;
 
-  ship(ship&& src) noexcept = default;
+  ship(ship&& src) = delete;
 
   auto operator=(ship&& rhs) noexcept -> ship& = default;
 
