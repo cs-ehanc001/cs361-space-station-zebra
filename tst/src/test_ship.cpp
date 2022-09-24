@@ -25,11 +25,11 @@ auto test_create_damaged_part_list() -> ehanc::test
 
   // get_part_count() and random_select() already well tested
 
-  auto test_helper {[&results](const std::list<ship::part> test_list,
+  auto test_helper {[&results](const std::list<ship::part>& test_list,
                                const auto& valid_part_list,
                                const int severity_min,
                                const int severity_max,
-                               std::string faction_name) {
+                               const std::string& faction_name) {
     std::vector<int> tmp_vec;
 
     for ( const auto& p : test_list ) {
@@ -52,23 +52,29 @@ auto test_create_damaged_part_list() -> ehanc::test
                      true, "Part ID not all unique - " + faction_name);
   }};
 
+  const std::string human {"human"};
+  const std::string ferengi {"ferengi"};
+  const std::string klingon {"klingon"};
+  const std::string romulan {"romulan"};
+  const std::string other {"other"};
+
   test_helper(human_list, conf::human_part_list, conf::human_severity_min,
-              conf::human_severity_max, "human");
+              conf::human_severity_max, human);
 
   test_helper(ferengi_list, conf::ferengi_part_list,
               conf::ferengi_severity_min, conf::ferengi_severity_max,
-              "ferengi");
+              ferengi);
 
   test_helper(klingon_list, conf::klingon_part_list,
               conf::klingon_severity_min, conf::klingon_severity_max,
-              "klingon");
+              klingon);
 
   test_helper(romulan_list, conf::romulan_part_list,
               conf::romulan_severity_min, conf::romulan_severity_max,
-              "romulan");
+              romulan);
 
   test_helper(other_list, conf::other_part_list, conf::other_severity_min,
-              conf::other_severity_max, "other");
+              conf::other_severity_max, other);
 
   return results;
 }
