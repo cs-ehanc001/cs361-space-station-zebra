@@ -77,7 +77,7 @@ auto test_construct_random_ship() -> ehanc::test
 {
   ehanc::test results;
 
-  const int sample_size {1000};
+  const int sample_size {5000};
 
   std::vector<ship> samples;
   samples.reserve(sample_size);
