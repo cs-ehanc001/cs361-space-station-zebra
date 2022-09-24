@@ -65,11 +65,11 @@ public:
     ++next_id;
   }
 
-  ship(const ship& src) noexcept = default;
+  ship(const ship& src) noexcept = delete;
 
   auto operator=(const ship& rhs) -> ship& = delete;
 
-  ship(ship&& src) = delete;
+  ship(ship&& src) = default;
 
   auto operator=(ship&& rhs) noexcept -> ship& = default;
 
