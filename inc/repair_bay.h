@@ -67,7 +67,7 @@ public:
    * @brief Determine if there is a ship docked
    */
   /* }}} */
-  inline auto has_ship() const noexcept -> bool
+  [[nodiscard]] inline auto has_ship() const noexcept -> bool
   {
     return m_docked_ship.has_value();
   }
@@ -77,7 +77,7 @@ public:
    * @brief Determine if repair bay is empty
    */
   /* }}} */
-  inline auto empty() const noexcept -> bool
+  [[nodiscard]] inline auto empty() const noexcept -> bool
   {
     return not this->has_ship();
   }
@@ -87,7 +87,7 @@ public:
    * @brief Get remaining repair time
    */
   /* }}} */
-  inline auto time_remaining() const noexcept -> int
+  [[nodiscard]] inline auto time_remaining() const noexcept -> int
   {
     return m_remaining_repair_time;
   }
