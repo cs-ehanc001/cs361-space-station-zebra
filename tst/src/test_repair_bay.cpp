@@ -3,7 +3,7 @@
 #include "test_repair_bay.h"
 #include "test_utils.hpp"
 
-auto test_dock() -> ehanc::test
+static auto test_dock() -> ehanc::test
 {
   ehanc::test results;
 
@@ -42,7 +42,7 @@ auto test_dock() -> ehanc::test
   return results;
 }
 
-auto test_step() -> ehanc::test
+static auto test_step() -> ehanc::test
 {
   ehanc::test results;
 

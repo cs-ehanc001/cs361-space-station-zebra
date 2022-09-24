@@ -3,5 +3,6 @@
 
 #include "space_station.h"
 
+void test_space_station();
 
 #endif

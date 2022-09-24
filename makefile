@@ -38,10 +38,10 @@ docopen: doc
 all: tags exe assembly preprocess doc test
 
 .PHONY: assembly
-assembly: asm asm/repair_bay.s asm/ship.s asm/main.s
+assembly: asm asm/space_station.s asm/repair_bay.s asm/ship.s asm/main.s
 
 .PHONY: preprocess
-preprocess: pre pre/repair_bay.ii pre/ship.ii pre/main.ii
+preprocess: pre pre/space_station.ii pre/repair_bay.ii pre/ship.ii pre/main.ii
 
 asm:
 	@mkdir -p asm
@@ -67,16 +67,29 @@ clean:
 	@rm -f obj/* bin/* tst/obj/* tst/bin/*
 	@rm -rf asm pre doc/html
 
-$(EXE): obj/repair_bay.o obj/ship.o obj/main.o
+$(EXE): obj/space_station.o obj/repair_bay.o obj/ship.o obj/main.o
 	@printf "\033[1;32mLinking\t\t $(EXE)\033[1;0m\n"
 	@$(CXX) -o $@ $^ $(CXXFLAGS)
 	@ln -sf $(EXE) ./run
 
-tst/bin/test: tst/bin tst/obj tst/obj/maintest.o tst/obj/test_repair_bay.o tst/obj/test_ship.o tst/obj/test_random.o obj/repair_bay.o obj/ship.o obj/main.o
+tst/bin/test: tst/bin tst/obj tst/obj/maintest.o tst/obj/test_repair_bay.o tst/obj/test_ship.o tst/obj/test_random.o tst/obj/test_space_station.o obj/space_station.o obj/repair_bay.o obj/ship.o obj/main.o
 	@printf "\033[1;32mLinking\t\t tst/bin/test\033[1;0m\n"
 	@rm -f tst/obj/main.o
 	@$(CXX) -o $@ tst/obj/*.o $(CXXFLAGS)
 	@ln -sf tst/bin/test ./run_tests
+
+obj/space_station.o: src/space_station.cpp inc/random.hpp inc/constants.h inc/ship.h inc/space_station.h inc/repair_bay.h
+	@printf "\033[1;32mBuilding object\t $@\033[1;0m\n"
+	@$(CXX) -c -o $@ $< -Iinc $(CXXFLAGS)
+	@ln -sf ../../obj/space_station.o tst/obj/space_station.o
+
+asm/space_station.s: src/space_station.cpp inc/random.hpp inc/constants.h inc/ship.h inc/space_station.h inc/repair_bay.h
+	@printf "\033[1;32mGenerating\t $@\033[1;0m\n"
+	@$(CXX) -S -o $@ $< -Iinc $(CXXFLAGS)
+
+pre/space_station.ii: src/space_station.cpp inc/random.hpp inc/constants.h inc/ship.h inc/space_station.h inc/repair_bay.h
+	@printf "\033[1;32mPreprocessing\t $@\033[1;0m\n"
+	@$(CXX) -E -o $@ $< -Iinc $(CXXFLAGS)
 
 obj/repair_bay.o: src/repair_bay.cpp inc/repair_bay.h inc/constants.h inc/ship.h
 	@printf "\033[1;32mBuilding object\t $@\033[1;0m\n"
@@ -104,20 +117,20 @@ pre/ship.ii: src/ship.cpp inc/utils/algorithm.hpp inc/random.hpp inc/constants.h
 	@printf "\033[1;32mPreprocessing\t $@\033[1;0m\n"
 	@$(CXX) -E -o $@ $< -Iinc $(CXXFLAGS)
 
-obj/main.o: src/main.cpp inc/constants.h
+obj/main.o: src/main.cpp inc/constants.h inc/space_station.h inc/constants.h inc/repair_bay.h inc/ship.h
 	@printf "\033[1;32mBuilding object\t $@\033[1;0m\n"
 	@$(CXX) -c -o $@ $< -Iinc $(CXXFLAGS)
 	@ln -sf ../../obj/main.o tst/obj/main.o
 
-asm/main.s: src/main.cpp inc/constants.h
+asm/main.s: src/main.cpp inc/constants.h inc/space_station.h inc/constants.h inc/repair_bay.h inc/ship.h
 	@printf "\033[1;32mGenerating\t $@\033[1;0m\n"
 	@$(CXX) -S -o $@ $< -Iinc $(CXXFLAGS)
 
-pre/main.ii: src/main.cpp inc/constants.h
+pre/main.ii: src/main.cpp inc/constants.h inc/space_station.h inc/constants.h inc/repair_bay.h inc/ship.h
 	@printf "\033[1;32mPreprocessing\t $@\033[1;0m\n"
 	@$(CXX) -E -o $@ $< -Iinc $(CXXFLAGS)
 
-tst/obj/maintest.o: tst/src/maintest.cpp tst/inc/test_utils.hpp inc/utils/etc.hpp inc/utils/algorithm.hpp inc/utils/metaprogramming.hpp inc/utils/term_colors.h tst/inc/test_random.h inc/random.hpp inc/constants.h inc/ship.h tst/inc/test_ship.h inc/ship.h
+tst/obj/maintest.o: tst/src/maintest.cpp tst/inc/test_utils.hpp inc/utils/etc.hpp inc/utils/algorithm.hpp inc/utils/metaprogramming.hpp inc/utils/term_colors.h tst/inc/test_random.h inc/random.hpp inc/constants.h inc/ship.h tst/inc/test_repair_bay.h inc/repair_bay.h tst/inc/test_ship.h inc/ship.h tst/inc/test_space_station.h inc/space_station.h inc/repair_bay.h
 	@printf "\033[1;32mBuilding object\t $@\033[1;0m\n"
 	@$(CXX) -c -o $@ $< -Iinc -Itst/inc $(CXXFLAGS)
 
@@ -130,5 +143,9 @@ tst/obj/test_ship.o: tst/src/test_ship.cpp inc/utils/algorithm.hpp inc/utils/etc
 	@$(CXX) -c -o $@ $< -Iinc -Itst/inc $(CXXFLAGS)
 
 tst/obj/test_random.o: tst/src/test_random.cpp inc/utils/etc.hpp inc/utils/algorithm.hpp inc/utils/metaprogramming.hpp inc/constants.h tst/inc/test_random.h inc/random.hpp inc/constants.h inc/ship.h tst/inc/test_utils.hpp inc/utils/term_colors.h
+	@printf "\033[1;32mBuilding object\t $@\033[1;0m\n"
+	@$(CXX) -c -o $@ $< -Iinc -Itst/inc $(CXXFLAGS)
+
+tst/obj/test_space_station.o: tst/src/test_space_station.cpp inc/utils/etc.hpp inc/utils/algorithm.hpp inc/utils/metaprogramming.hpp tst/inc/test_space_station.h inc/space_station.h inc/constants.h inc/repair_bay.h inc/ship.h tst/inc/test_utils.hpp inc/utils/term_colors.h inc/constants.h
 	@printf "\033[1;32mBuilding object\t $@\033[1;0m\n"
 	@$(CXX) -c -o $@ $< -Iinc -Itst/inc $(CXXFLAGS)
