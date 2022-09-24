@@ -65,13 +65,13 @@ public:
     ++next_id;
   }
 
-  ship(const ship& src) noexcept;
+  ship(const ship& src) noexcept = default;
 
-  auto operator=(const ship& rhs) noexcept -> ship&;
+  auto operator=(const ship& rhs) noexcept -> ship& = default;
 
-  ship(ship&& src) noexcept;
+  ship(ship&& src) noexcept = default;
 
-  auto operator=(ship&& rhs) noexcept -> ship&;
+  auto operator=(ship&& rhs) noexcept -> ship& = default;
 
   ~ship() noexcept = default;
 
@@ -91,7 +91,7 @@ public:
   /* }}} */
   [[nodiscard]] inline auto is_damaged() const noexcept -> bool
   {
-    return m_damaged_parts.empty();
+    return not m_damaged_parts.empty();
   }
 
   /* {{{ doc */
@@ -118,6 +118,12 @@ public:
   [[nodiscard]] inline auto get_id() const noexcept -> int
   {
     return m_id;
+  }
+
+  [[nodiscard]] inline auto get_damaged_parts_list() const noexcept
+      -> const std::list<part>&
+  {
+    return m_damaged_parts;
   }
 };
 

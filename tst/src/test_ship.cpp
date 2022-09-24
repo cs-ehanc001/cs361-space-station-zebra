@@ -1,6 +1,7 @@
 #include <vector>
 
 #include "utils/algorithm.hpp"
+#include "utils/etc.hpp"
 
 #include "test_ship.h"
 #include "test_utils.hpp"
@@ -70,18 +71,79 @@ auto test_create_damaged_part_list() -> ehanc::test
   return results;
 }
 
+// also tests ship(faction), is_damaged(), repair(),
+// get_damaged_part_count(), and get_id() incidentally
 auto test_construct_random_ship() -> ehanc::test
 {
   ehanc::test results;
 
-  // get_random_faction() and create_damaged_part_list already
-  // tested
+  const int sample_size {1000};
+
+  std::vector<ship> samples;
+  samples.reserve(sample_size);
+  for ( int i {0}; i < sample_size; ++i ) {
+    samples.push_back(ship::construct_random_ship());
+  }
+
+  int ref {conf::starting_ship_id - 1};
+
+  using namespace ehanc::literals::size_t_literal;
+  std::for_each(samples.begin(), samples.end(), [&](ship& sample) {
+    results.add_case(sample.get_id(), ++ref, "Bad ID");
+    results.add_case(sample.is_damaged(), true, "Not damaged");
+    int total_damage {sample.get_total_damage()};
+    results.add_case(total_damage > 0, true,
+                     "Bad total damage value: "
+                         + std::to_string(total_damage));
+    std::size_t damaged_part_count {sample.get_damaged_part_count()};
+    results.add_case(damaged_part_count > 0_z, true,
+                     "Bad damaged part cout: "
+                         + std::to_string(damaged_part_count));
+    /*******************************************************************/
+    sample.repair();
+    /*******************************************************************/
+    results.add_case(sample.is_damaged(), false, "Damaged after repair");
+    total_damage = sample.get_total_damage();
+    results.add_case(total_damage == 0, true,
+                     "Bad total damage value after repair: "
+                         + std::to_string(total_damage));
+    damaged_part_count = sample.get_damaged_part_count();
+    results.add_case(damaged_part_count == 0, true,
+                     "Bad damaged part cout after repair: "
+                         + std::to_string(damaged_part_count));
+  });
 
   return results;
 }
+
+/* auto test_get_total_damage() -> ehanc::test */
+/* { */
+/*   ehanc::test results; */
+
+/*   const int sample_size {2}; */
+
+/*   const std::vector<ship> samples {[sample_size]() -> std::vector<ship>
+ * { */
+/*     std::vector<ship> retval; */
+/*     retval.reserve(sample_size); */
+/*     for ( int i {0}; i < sample_size; ++i ) { */
+/*       retval.push_back(ship::construct_random_ship()); */
+/*     } */
+/*     return retval; */
+/*   }()}; // IILE */
+
+/*   std::for_each(samples.cbegin(), samples.cend(), [&](const ship&
+ * sample) { */
+
+/*   }); */
+
+/*   return results; */
+/* } */
 
 void test_ship()
 {
   ehanc::run_test("ship::create_damaged_part_list",
                   &test_create_damaged_part_list);
+  ehanc::run_test("ship::construct_random_ship",
+                  &test_construct_random_ship);
 }
