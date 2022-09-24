@@ -5,7 +5,7 @@ auto test_dock() -> ehanc::test
 {
   ehanc::test results;
 
-  const int sample_size {2};
+  const int sample_size {1000};
 
   repair_bay test;
   std::vector<ship> sample_ships;
@@ -22,7 +22,9 @@ auto test_dock() -> ehanc::test
     results.add_case(test.empty(), true,
                      "Does not report being empty when should");
     results.add_case(test.time_remaining(), 0);
+
     test.dock(std::move(sample));
+
     results.add_case(test.has_ship(), true,
                      "Reports not having ship when should");
     results.add_case(test.empty(), false,
@@ -30,6 +32,10 @@ auto test_dock() -> ehanc::test
     results.add_case(test.time_remaining(), ship_repair_time,
                      "Inaccurate time remaining");
   }};
+
+  for ( ship& sample : sample_ships ) {
+    test_helper(std::move(sample));
+  }
 
   return results;
 }
