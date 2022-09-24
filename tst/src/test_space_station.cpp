@@ -19,7 +19,7 @@ static auto test_step() -> ehanc::test
                    "Bays not all empty");
   results.add_case(test.queue_size(), 0_z, "Queue not starting empty");
 
-  const std::size_t num_sample_steps {5};
+  const std::size_t num_sample_steps {100'000};
 
   std::size_t expected_num_ships_in_station {0};
   std::size_t actual_num_ships_in_station {0};

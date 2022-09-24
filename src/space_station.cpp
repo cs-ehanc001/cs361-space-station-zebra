@@ -19,11 +19,15 @@ auto space_station::step() noexcept -> step_summary
   // all bays step (tick down timer, clear if done), then,
   // if empty, dock next in line
   for ( repair_bay& bay : m_bays ) {
-    bay.step();
+    const bool ship_left_bay {bay.step()};
     if ( bay.empty() ) {
-      bay.dock(std::move(m_repair_queue.front()));
-      m_repair_queue.pop();
-      ++exiting_ship_count;
+      if ( this->queue_size() != 0 ) {
+        bay.dock(std::move(m_repair_queue.front()));
+        m_repair_queue.pop();
+      }
+      if ( ship_left_bay ) {
+        ++exiting_ship_count;
+      }
     }
   }
 

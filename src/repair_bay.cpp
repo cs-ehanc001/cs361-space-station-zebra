@@ -9,13 +9,17 @@ void repair_bay::dock(ship&& incoming_ship) noexcept
       conf::severity_to_time(m_docked_ship->get_total_damage());
 }
 
-void repair_bay::step() noexcept
+auto repair_bay::step() noexcept -> bool
 {
   if ( m_remaining_repair_time != 0 ) {
+    // ship in repair bay
     --m_remaining_repair_time;
+    if ( m_remaining_repair_time == 0 ) {
+      // repairs completed
+      m_docked_ship.reset();
+      return true; // ship left this time step
+    }
   }
-
-  if ( m_remaining_repair_time == 0 ) {
-    m_docked_ship.reset();
-  }
+  // repair bay did nothing this time step
+  return false;
 }

@@ -58,9 +58,12 @@ public:
   /**
    * @brief Perform one time step - continue repairs, and send
    * ship away if repaired
+   *
+   * @return Returns true if repairs completed and ship
+   * left on this time step.
    */
   /* }}} */
-  void step() noexcept;
+  auto step() noexcept -> bool;
 
   /* {{{ doc */
   /**
