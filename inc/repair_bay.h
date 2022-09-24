@@ -77,7 +77,7 @@ public:
    * @brief Determine if repair bay is empty
    */
   /* }}} */
-  inline auto is_empty() const noexcept -> bool
+  inline auto empty() const noexcept -> bool
   {
     return not this->has_ship();
   }

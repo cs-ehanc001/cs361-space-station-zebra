@@ -3,5 +3,6 @@
 
 #include "repair_bay.h"
 
+void test_repair_bay();
 
 #endif
