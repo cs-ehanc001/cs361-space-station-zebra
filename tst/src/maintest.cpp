@@ -1,11 +1,14 @@
-#include "test_queue.h"
 #include "test_utils.hpp"
 
-auto main([[maybe_unused]] const int argc,
-          [[maybe_unused]] const char* const* const argv) -> int
+#include "test_random.h"
+#include "test_ship.h"
+
+auto main() -> int
 {
 
-  ehanc::test_section("Queue", &test_queue);
+  ehanc::test_section("Random", &test_random);
+
+  ehanc::test_section("Ship", &test_ship);
 
   return 0;
 }
