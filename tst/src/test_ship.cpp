@@ -1,3 +1,5 @@
+#include <algorithm>
+#include <numeric>
 #include <vector>
 
 #include "utils/algorithm.hpp"
@@ -116,29 +118,38 @@ auto test_construct_random_ship() -> ehanc::test
   return results;
 }
 
-/* auto test_get_total_damage() -> ehanc::test */
-/* { */
-/*   ehanc::test results; */
+auto test_get_total_damage() -> ehanc::test
+{
+  ehanc::test results;
 
-/*   const int sample_size {2}; */
+  const int sample_size {5000};
 
-/*   const std::vector<ship> samples {[sample_size]() -> std::vector<ship>
- * { */
-/*     std::vector<ship> retval; */
-/*     retval.reserve(sample_size); */
-/*     for ( int i {0}; i < sample_size; ++i ) { */
-/*       retval.push_back(ship::construct_random_ship()); */
-/*     } */
-/*     return retval; */
-/*   }()}; // IILE */
+  const std::vector<ship> samples {[sample_size]() -> std::vector<ship> {
+    std::vector<ship> retval;
+    retval.reserve(sample_size);
+    for ( int i {0}; i < sample_size; ++i ) {
+      retval.push_back(ship::construct_random_ship());
+    }
+    return retval;
+  }()}; // IILE
 
-/*   std::for_each(samples.cbegin(), samples.cend(), [&](const ship&
- * sample) { */
+  std::for_each(samples.cbegin(), samples.cend(), [&](const ship& sample) {
+    const std::list<ship::part>& damaged_part_list {
+        sample.get_damaged_parts_list()};
+    const int actual_damage {[&]() -> int {
+      std::vector<int> tmp_vec;
+      tmp_vec.reserve(sample_size);
+      std::transform(damaged_part_list.cbegin(), damaged_part_list.cend(),
+                     std::back_inserter(tmp_vec),
+                     [](const ship::part& val) { return val.damage; });
+      return std::accumulate(tmp_vec.cbegin(), tmp_vec.cend(), 0);
+    }()};
+    results.add_case(sample.get_total_damage(), actual_damage,
+                     "Wrong total damage");
+  });
 
-/*   }); */
-
-/*   return results; */
-/* } */
+  return results;
+}
 
 void test_ship()
 {
@@ -146,4 +157,5 @@ void test_ship()
                   &test_create_damaged_part_list);
   ehanc::run_test("ship::construct_random_ship",
                   &test_construct_random_ship);
+  ehanc::run_test("ship::get_total_damage", &test_get_total_damage);
 }
