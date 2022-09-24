@@ -10,7 +10,7 @@
 #include "test_random.h"
 #include "test_utils.hpp"
 
-auto test_get_part_count() -> ehanc::test
+static auto test_get_part_count() -> ehanc::test
 {
   ehanc::test results;
 
@@ -19,6 +19,8 @@ auto test_get_part_count() -> ehanc::test
   std::deque<test_value_t> test_values;
 
   const std::size_t num_samples {1'000'000};
+
+  const double mean_fudge_factor {0.5};
 
   for ( std::size_t i {0}; i < num_samples; ++i ) {
     test_values.push_back(static_cast<long>(get_part_count()));
@@ -32,13 +34,13 @@ auto test_get_part_count() -> ehanc::test
   double mean_diff {
       std::abs(test_values_mean - conf::broken_part_count_mean)};
 
-  // Testing for being within 0.5 of mean, because requiring a minimum of 1
-  // drags down the mean
+  // Testing for being within mean_fudge_factor of mean, because requiring
+  // a minimum of 1 drags down the mean
   std::string mean_test_msg {
-      "Measured mean not within 0.5 of expected, actual mean diff == "};
-  mean_test_msg += std::to_string(mean_diff);
+      "Measured mean not within " + std::to_string(mean_fudge_factor)
+      + " of expected, actual mean diff == " + std::to_string(mean_diff)};
 
-  results.add_case(mean_diff < 0.5, true, mean_test_msg);
+  results.add_case(mean_diff < mean_fudge_factor, true, mean_test_msg);
   results.add_case(test_values_mean < conf::broken_part_count_mean, true,
                    "Mean not dragged down");
 
@@ -58,7 +60,38 @@ auto test_get_part_count() -> ehanc::test
   return results;
 }
 
-auto test_random_select() -> ehanc::test
+static auto test_get_new_ship_count() noexcept -> ehanc::test
+{
+  ehanc::test results;
+
+  using test_value_t = double;
+  std::deque<test_value_t> test_values;
+  const std::size_t num_samples {3'000'000};
+
+  const double mean_fudge_factor {0.001};
+
+  for ( std::size_t i {0}; i < num_samples; ++i ) {
+    test_values.push_back(static_cast<double>(get_new_ship_count()));
+  }
+
+  double test_values_mean {
+      static_cast<double>(
+          std::accumulate(test_values.cbegin(), test_values.cend(), 0.0))
+      / static_cast<double>(num_samples)};
+
+  double mean_diff {
+      std::abs(test_values_mean - conf::new_ship_count_poisson_mean)};
+
+  std::string mean_test_msg {
+      "Measured mean not within " + std::to_string(mean_fudge_factor)
+      + " of expected, actual mean diff == " + std::to_string(mean_diff)};
+
+  results.add_case(mean_diff < mean_fudge_factor, true, mean_test_msg);
+
+  return results;
+}
+
+static auto test_random_select() -> ehanc::test
 {
   ehanc::test results;
 
@@ -102,7 +135,7 @@ auto test_random_select() -> ehanc::test
   return results;
 }
 
-auto test_get_random_faction() -> ehanc::test
+static auto test_get_random_faction() -> ehanc::test
 {
   ehanc::test results;
 
@@ -179,6 +212,7 @@ auto test_get_random_faction() -> ehanc::test
 void test_random()
 {
   ehanc::run_test("get_part_count", &test_get_part_count);
+  ehanc::run_test("get_new_ship_count", &test_get_new_ship_count);
   ehanc::run_test("random_select", &test_random_select);
   ehanc::run_test("get_random_faction", &test_get_random_faction);
 }

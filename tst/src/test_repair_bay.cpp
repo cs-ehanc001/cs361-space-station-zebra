@@ -3,11 +3,11 @@
 #include "test_repair_bay.h"
 #include "test_utils.hpp"
 
-auto test_dock() -> ehanc::test
+static auto test_dock() -> ehanc::test
 {
   ehanc::test results;
 
-  const int sample_size {1000};
+  const int sample_size {1'000};
 
   repair_bay test;
   std::vector<ship> sample_ships;
@@ -42,11 +42,11 @@ auto test_dock() -> ehanc::test
   return results;
 }
 
-auto test_step() -> ehanc::test
+static auto test_step() -> ehanc::test
 {
   ehanc::test results;
 
-  const int sample_size {1000};
+  const int sample_size {1'000};
 
   repair_bay test;
   std::vector<ship> sample_ships;

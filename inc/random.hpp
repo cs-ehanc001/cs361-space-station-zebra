@@ -33,6 +33,14 @@ inline auto get_part_count() noexcept -> int
   return std::max(generated, conf::broken_part_count_min);
 }
 
+inline auto get_new_ship_count() noexcept -> int
+{
+  static std::poisson_distribution<int> new_ship_dist(
+      conf::new_ship_count_poisson_mean);
+
+  return new_ship_dist(random_engine());
+}
+
 /* {{{ doc */
 /**
  * @brief Randomly selects one element from the range defined by
