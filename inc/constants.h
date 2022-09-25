@@ -1,46 +1,282 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+#include <algorithm>
 #include <array>
+#include <cstddef>
+#include <random>
+#include <string_view>
 
 namespace conf {
 
+using random_engine = std::mt19937;
+
+/**
+ * @brief Number of time steps to perform by default.
+ * Can be overwritten by the command-line option `--steps`.
+ *
+ * @note Submitting: `10'000`
+ */
+constexpr inline int default_time_steps {10'000};
+
+/**
+ * @brief Path to log file to use by default.
+ * Can be overwritten by the command-line option `--logfile`.
+ *
+ * @note Submitting: `"zebra_diary.txt"`
+ */
+constexpr inline std::string_view default_log_file {"zebra_diary.txt"};
+
+/**
+ * @brief Determines if output will sent to stdout by default.
+ * `true` will make available the command-line option `--quiet`
+ * to suppress the output.
+ * `false` will  make available the command-line option `--print`
+ * to enable the output.
+ *
+ * @note Submitting: `true`
+ */
+constexpr inline bool print_to_console_by_default {true};
+
+/**
+ * @brief Determines if output will sent to a log file by default.
+ * `true` will make available the command-line option `--no-log`
+ * to suppress the output.
+ * `false` will  make available the command-line option `--log`
+ * to enable the output.
+ *
+ * @note Submitting: `true`
+ */
+constexpr inline bool write_to_logfile_by_default {true};
+
+/**
+ * @brief Number of repair bays that Space Station Zebra will
+ * have.
+ *
+ * @note Submitting: `3`
+ */
 constexpr inline int num_repair_bays {3};
 
+/**
+ * @brief Maximum number of ships in the repair queue before
+ * program exits.
+ * This exists to avoid utilizing too much memory.
+ *
+ * @note Submitting: `5'000'000`
+ */
+constexpr inline std::size_t cutoff_queue_size {5'000'000};
+
+/**
+ * @brief Separator to be used for the header of each hour's log.
+ *
+ * @note Submitting:
+ *   `"############################################################"`
+ *
+ */
+constexpr inline std::string_view header_line {
+    "############################################################"};
+
+/**
+ * @brief ID of the first ship to be generated.
+ * ID numbers go up sequentially for each ship.
+ *
+ * @note Submitting: `100`
+ */
 constexpr inline int starting_ship_id {100};
 
+/**
+ * @brief Mean number of ships to be generated each time step.
+ * Value is used in a poisson mean distribution, which only
+ * allows values >= 0.
+ *
+ * @note Submitting: `1.2`
+ */
 constexpr inline double new_ship_count_poisson_mean {1.2};
 
+/**
+ * @brief Chance of a human ship being generated, as a percentage.
+ *
+ * @note Submitting: `50`
+ *
+ * @warning human_ship_chance + ferengi_ship_chance + klingon_ship_chance
+ * + romulan_ship_chance + other_ship_chance MUST be equal to 100.
+ * Compilation will fail otherwise, checked by a `static_assert`.
+ */
 constexpr inline int human_ship_chance {50};
+
+/**
+ * @brief Chance of a human ship being generated, as a percentage.
+ *
+ * @note Submitting: `15`
+ *
+ * @warning human_ship_chance + ferengi_ship_chance + klingon_ship_chance
+ * + romulan_ship_chance + other_ship_chance MUST be equal to 100.
+ * Compilation will fail otherwise, checked by a `static_assert`.
+ */
 constexpr inline int ferengi_ship_chance {15};
+
+/**
+ * @brief Chance of a human ship being generated, as a percentage.
+ *
+ * @note Submitting: `10`
+ *
+ * @warning human_ship_chance + ferengi_ship_chance + klingon_ship_chance
+ * + romulan_ship_chance + other_ship_chance MUST be equal to 100.
+ * Compilation will fail otherwise, checked by a `static_assert`.
+ */
 constexpr inline int klingon_ship_chance {10};
+
+/**
+ * @brief Chance of a human ship being generated, as a percentage.
+ *
+ * @note Submitting: `5`
+ *
+ * @warning human_ship_chance + ferengi_ship_chance + klingon_ship_chance
+ * + romulan_ship_chance + other_ship_chance MUST be equal to 100.
+ * Compilation will fail otherwise, checked by a `static_assert`.
+ */
 constexpr inline int romulan_ship_chance {5};
+
+/**
+ * @brief Chance of a human ship being generated, as a percentage.
+ *
+ * @note Submitting: `20`
+ *
+ * @warning human_ship_chance + ferengi_ship_chance + klingon_ship_chance
+ * + romulan_ship_chance + other_ship_chance MUST be equal to 100.
+ * Compilation will fail otherwise, checked by a `static_assert`.
+ */
 constexpr inline int other_ship_chance {20};
+
+// Ensure ship chances are set to valid values
 static_assert(human_ship_chance + ferengi_ship_chance + klingon_ship_chance
                       + romulan_ship_chance + other_ship_chance
                   == 100,
               "Sum of ship type chances != 100%");
 
+/**
+ * @brief Minimum severity of damage to a human ship part.
+ * Range is inclusive.
+ *
+ * @note Submitting: `1`
+ */
 constexpr inline int human_severity_min {1};
+
+/**
+ * @brief Maximum severity of damage to a human ship part.
+ * Range is inclusive.
+ *
+ * @note Submitting: `5`
+ */
 constexpr inline int human_severity_max {5};
+
+/**
+ * @brief Minimum severity of damage to a ferengi ship part.
+ * Range is inclusive.
+ *
+ * @note Submitting: `2`
+ */
 constexpr inline int ferengi_severity_min {2};
+
+/**
+ * @brief Maximum severity of damage to a ferengi ship part.
+ * Range is inclusive.
+ *
+ * @note Submitting: `7`
+ */
 constexpr inline int ferengi_severity_max {7};
+
+/**
+ * @brief Minimum severity of damage to a klingon ship part.
+ * Range is inclusive.
+ *
+ * @note Submitting: `2`
+ */
 constexpr inline int klingon_severity_min {2};
+
+/**
+ * @brief Maximum severity of damage to a klingon ship part.
+ * Range is inclusive.
+ *
+ * @note Submitting: `6`
+ */
 constexpr inline int klingon_severity_max {6};
+
+/**
+ * @brief Minimum severity of damage to a romulan ship part.
+ * Range is inclusive.
+ *
+ * @note Submitting: `3`
+ */
 constexpr inline int romulan_severity_min {3};
+
+/**
+ * @brief Maximum severity of damage to a romulan ship part.
+ * Range is inclusive.
+ *
+ * @note Submitting: `7`
+ */
 constexpr inline int romulan_severity_max {7};
+
+/**
+ * @brief Minimum severity of damage to an other ship part.
+ * Range is inclusive.
+ *
+ * @note Submitting: `1`
+ */
 constexpr inline int other_severity_min {1};
+
+/**
+ * @brief Maximum severity of damage to an other ship part.
+ * Range is inclusive.
+ *
+ * @note Submitting: `10`
+ */
 constexpr inline int other_severity_max {10};
 
+/**
+ * @brief Mean number of broken parts a ship has when generated.
+ * Mean is fed into a normal distribution.
+ *
+ * @note Submitting: `7.0`
+ */
 constexpr inline double broken_part_count_mean {7.0};
+
+/**
+ * @brief Standard deviation of distribution of number of broken parts a
+ * ship has when generated.
+ * Standard deviation is fed into a normal distribution.
+ *
+ * @note Submitting: `3.0`
+ */
 constexpr inline double broken_part_count_stddev {3.0};
+
+/**
+ * @brief Minimum number of broken parts a ship can have when generated.
+ * If random number generation produces a value less than this,
+ * that value will be discarded and this value will be used.
+ *
+ * @note Submitting: `1`
+ */
 constexpr inline int broken_part_count_min {1};
 
+/**
+ * @brief Function which converts severity of damage
+ * (`damage` member of `ship::part`) to time remaining.
+ *
+ * @note Submitting: `return std::max(severity / 5, 1);`
+ *
+ * @warning Must not return 0!
+ */
 constexpr auto severity_to_time(int severity) noexcept -> int
 {
-  return severity / 5;
+  // returning 0 causes problems
+  return std::max(severity / 5, 1);
 }
 
+/**
+ * @brief List of valid part IDs for parts in a human ship.
+ */
 constexpr std::array<int, 100> human_part_list {
     1,  2,  3,  4,  5,  6,  7,  8,  9,  10, 11, 12, 13, 14, 15, 16, 17,
     18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
@@ -49,6 +285,9 @@ constexpr std::array<int, 100> human_part_list {
     69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85,
     86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100};
 
+/**
+ * @brief List of valid part IDs for parts in a ferengi ship.
+ */
 constexpr std::array<int, 76> ferengi_part_list {
     75,  76,  77,  78,  79,  80,  81,  82,  83,  84,  85,  86,  87,
     88,  89,  90,  91,  92,  93,  94,  95,  96,  97,  98,  99,  100,
@@ -57,6 +296,9 @@ constexpr std::array<int, 76> ferengi_part_list {
     127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139,
     140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150};
 
+/**
+ * @brief List of valid part IDs for parts in a klingon ship.
+ */
 constexpr std::array<int, 100> klingon_part_list {
     2,   4,   6,   8,   10,  12,  14,  16,  18,  20,  22,  24,  26,
     28,  30,  32,  34,  36,  38,  40,  42,  44,  46,  48,  50,  52,
@@ -67,6 +309,9 @@ constexpr std::array<int, 100> klingon_part_list {
     158, 160, 162, 164, 166, 168, 170, 172, 174, 176, 178, 180, 182,
     184, 186, 188, 190, 192, 194, 196, 198, 200};
 
+/**
+ * @brief List of valid part IDs for parts in a romulan ship.
+ */
 constexpr std::array<int, 100> romulan_part_list {
     1,   3,   5,   7,   9,   11,  13,  15,  17,  19,  21,  23,  25,
     27,  29,  31,  33,  35,  37,  39,  41,  43,  45,  47,  49,  51,
@@ -77,6 +322,9 @@ constexpr std::array<int, 100> romulan_part_list {
     157, 159, 161, 163, 165, 167, 169, 171, 173, 175, 177, 179, 181,
     183, 185, 187, 189, 191, 193, 195, 197, 199};
 
+/**
+ * @brief List of valid part IDs for parts in an other ship.
+ */
 constexpr std::array<int, 800> other_part_list {
     200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213,
     214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227,

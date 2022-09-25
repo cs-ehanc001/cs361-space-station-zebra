@@ -1,6 +1,7 @@
 #ifndef REPAIR_BAY_H
 #define REPAIR_BAY_H
 
+#include <iostream>
 #include <optional>
 
 #include "constants.h"
@@ -15,7 +16,7 @@ private:
 
 public:
 
-  repair_bay() = default;
+  repair_bay() noexcept = default;
 
   /* {{{ doc */
   /**
@@ -65,6 +66,8 @@ public:
   /* }}} */
   auto step() noexcept -> bool;
 
+  void display(std::ostream& out) const noexcept;
+
   /* {{{ doc */
   /**
    * @brief Determine if there is a ship docked
@@ -95,5 +98,12 @@ public:
     return m_remaining_repair_time;
   }
 };
+
+inline auto operator<<(std::ostream& out, const repair_bay& rhs) noexcept
+    -> std::ostream&
+{
+  rhs.display(out);
+  return out;
+}
 
 #endif

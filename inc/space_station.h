@@ -2,20 +2,19 @@
 #define SPACE_STATION_H
 
 #include <array>
+#include <cstddef>
+#include <iostream>
 #include <queue>
+#include <string>
+#include <string_view>
 
 #include "constants.h"
 #include "repair_bay.h"
 #include "ship.h"
 
+// NOLINTNEXTLINE(cppcoreguidelines-special-member-functions)
 class space_station
 {
-private:
-
-  std::array<repair_bay, conf::num_repair_bays> m_bays {};
-  std::queue<ship> m_repair_queue {};
-  std::size_t m_step_count {};
-
 public:
 
   struct step_summary {
@@ -23,7 +22,26 @@ public:
     std::size_t leaving_ships;
   };
 
-  space_station() = default;
+private:
+
+  std::array<repair_bay, conf::num_repair_bays> m_bays {};
+
+  // Only using a deque instead of a queue so that I can
+  // print it to the output
+  std::queue<ship> m_repair_queue {};
+  std::size_t m_step_count {};
+  step_summary m_last_step_summary {};
+  std::string m_name {"Zebra"};
+
+public:
+
+  space_station(std::string_view name) noexcept
+      : m_bays {}
+      , m_repair_queue {}
+      , m_step_count {}
+      , m_last_step_summary {}
+      , m_name(name)
+  {}
 
   /* {{{ doc */
   /**
@@ -69,7 +87,7 @@ public:
    * @brief Return size of internal queue.
    */
   /* }}} */
-  inline auto queue_size() const noexcept -> std::size_t
+  [[nodiscard]] inline auto queue_size() const noexcept -> std::size_t
   {
     return m_repair_queue.size();
   }
@@ -79,24 +97,26 @@ public:
    * @brief Returns number of time steps that have occured.
    */
   /* }}} */
-  inline auto step_count() const noexcept -> std::size_t
+  [[nodiscard]] inline auto step_count() const noexcept -> std::size_t
   {
     return m_step_count;
   }
+
+  void display(std::ostream& out) const noexcept;
 
   /* {{{ doc */
   /**
    * @brief Return number of empty repair bays.
    */
   /* }}} */
-  auto empty_bay_count() const noexcept -> int;
+  [[nodiscard]] auto empty_bay_count() const noexcept -> int;
 
   /* {{{ doc */
   /**
    * @brief Return number of occupied repair bays.
    */
   /* }}} */
-  auto occupied_bay_count() const noexcept -> int;
+  [[nodiscard]] auto occupied_bay_count() const noexcept -> int;
 };
 
 #endif

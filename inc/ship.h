@@ -1,7 +1,10 @@
 #ifndef SHIP_H
 #define SHIP_H
 
+#include <cstddef>
+#include <iostream>
 #include <list>
+#include <string>
 
 #include "constants.h"
 
@@ -77,6 +80,8 @@ public:
 
   static auto construct_random_ship() noexcept -> ship;
 
+  void display(std::ostream& out) const noexcept;
+
   /* {{{ doc */
   /**
    * @brief Get sum of all damage values of all parts.
@@ -126,5 +131,12 @@ public:
     return m_damaged_parts;
   }
 };
+
+inline auto operator<<(std::ostream& out, const ship& rhs) noexcept
+    -> std::ostream&
+{
+  rhs.display(out);
+  return out;
+}
 
 #endif

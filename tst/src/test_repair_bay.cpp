@@ -1,3 +1,5 @@
+#include <algorithm>
+#include <utility>
 #include <vector>
 
 #include "test_repair_bay.h"

@@ -1,3 +1,4 @@
+#include <cstddef>
 #include <utility>
 
 #include "utils/etc.hpp"
@@ -13,13 +14,13 @@ static auto test_step() -> ehanc::test
 
   ehanc::test results;
 
-  space_station test;
+  space_station test("Guinea Pig");
 
   results.add_case(test.empty_bay_count(), conf::num_repair_bays,
                    "Bays not all empty");
   results.add_case(test.queue_size(), 0_z, "Queue not starting empty");
 
-  const std::size_t num_sample_steps {100'000};
+  const std::size_t num_sample_steps {10'000};
 
   std::size_t expected_num_ships_in_station {0};
   std::size_t actual_num_ships_in_station {0};

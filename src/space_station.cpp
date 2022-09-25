@@ -1,5 +1,10 @@
 #include <algorithm>
+#include <cstddef>
+#include <iostream>
+#include <utility>
 #include <vector>
+
+#include "utils/etc.hpp"
 
 #include "random.hpp"
 #include "space_station.h"
@@ -34,7 +39,45 @@ auto space_station::step() noexcept -> step_summary
   // increase internal counter
   ++m_step_count;
 
-  return {new_ship_count, exiting_ship_count};
+  m_last_step_summary = step_summary {new_ship_count, exiting_ship_count};
+
+  return m_last_step_summary;
+}
+
+void space_station::display(std::ostream& out) const noexcept
+{
+  out << conf::header_line << '\n';
+  for ( int i {0}; i != conf::header_line.length() / 4; ++i ) {
+    out << ' ';
+  }
+  out << m_name << "'s report for hour " << m_step_count << '\n';
+  out << conf::header_line << '\n' << '\n';
+
+  out << m_last_step_summary.new_ships << " ships arrived, "
+      << m_last_step_summary.leaving_ships << " ships exited." << '\n'
+      << '\n';
+
+  std::for_each(m_bays.cbegin(), m_bays.cend(),
+                [&out, index {0}](const repair_bay& bay) mutable {
+                  out << "Repair Bay #" << ++index << "'s report:\n"
+                      << bay << '\n';
+                });
+
+  out << '\n';
+
+  if ( this->queue_size() > 2 ) {
+    out << "Queue status: " << this->queue_size() << " ships."
+        << " Front and back of queue:\n\n"
+        << m_repair_queue.front() << '\n'
+        << m_repair_queue.back() << '\n'
+        << '\n';
+  } else if ( this->queue_size() == 1 ) {
+    out << "Queue status: 1 ship. Member is:\n\n"
+        << m_repair_queue.front() << '\n'
+        << '\n';
+  } else {
+    out << "Queue status: 0 ships.\n\n\n";
+  }
 }
 
 auto space_station::empty_bay_count() const noexcept -> int

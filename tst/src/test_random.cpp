@@ -1,8 +1,13 @@
 #include <algorithm>
+#include <cmath>
+#include <cstddef>
 #include <deque>
 #include <numeric>
 #include <sstream>
 #include <string>
+#include <string_view>
+#include <type_traits>
+#include <vector>
 
 #include "utils/etc.hpp"
 
@@ -68,7 +73,7 @@ static auto test_get_new_ship_count() noexcept -> ehanc::test
   std::deque<test_value_t> test_values;
   const std::size_t num_samples {3'000'000};
 
-  const double mean_fudge_factor {0.001};
+  const double mean_fudge_factor {0.003};
 
   for ( std::size_t i {0}; i < num_samples; ++i ) {
     test_values.push_back(static_cast<double>(get_new_ship_count()));

@@ -1,5 +1,9 @@
 #include <algorithm>
+#include <cstddef>
+#include <iterator>
+#include <list>
 #include <numeric>
+#include <string>
 #include <vector>
 
 #include "utils/algorithm.hpp"

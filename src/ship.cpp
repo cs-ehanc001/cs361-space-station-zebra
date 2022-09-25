@@ -1,8 +1,14 @@
 #include <algorithm>
+#include <cstddef>
+#include <iostream>
+#include <list>
 #include <numeric>
+#include <random>
+#include <string_view>
 #include <vector>
 
 #include "utils/algorithm.hpp"
+#include "utils/etc.hpp"
 
 #include "random.hpp"
 #include "ship.h"
@@ -90,6 +96,32 @@ auto ship::construct_random_ship() noexcept -> ship
   faction random_faction {get_random_faction()};
 
   return {random_faction};
+}
+
+void ship::display(std::ostream& out) const noexcept
+{
+  auto faction_to_string {[](faction fact) -> std::string_view {
+    switch ( fact ) {
+    case faction::human:
+      return "Human";
+    case faction::ferengi:
+      return "Ferengi";
+    case faction::klingon:
+      return "Klingon";
+    case faction::romulan:
+      return "Romulan";
+    case faction::other:
+      return "Other";
+    default:
+      return "This message should not appear, see ship::display";
+    }
+  }};
+
+  out << "Ship " << m_id << ", " << faction_to_string(m_faction)
+      << ", needing repairs for " << this->get_damaged_part_count()
+      << " parts, requiring "
+      << conf::severity_to_time(this->get_total_damage())
+      << " hours total for repair\n";
 }
 
 auto ship::get_total_damage() const noexcept -> int

@@ -38,10 +38,10 @@ docopen: doc
 all: tags exe assembly preprocess doc test
 
 .PHONY: assembly
-assembly: asm asm/space_station.s asm/repair_bay.s asm/ship.s asm/main.s
+assembly: asm asm/space_station.s asm/repair_bay.s asm/ship.s asm/arg_parser.s asm/main.s
 
 .PHONY: preprocess
-preprocess: pre pre/space_station.ii pre/repair_bay.ii pre/ship.ii pre/main.ii
+preprocess: pre pre/space_station.ii pre/repair_bay.ii pre/ship.ii pre/arg_parser.ii pre/main.ii
 
 asm:
 	@mkdir -p asm
@@ -67,12 +67,12 @@ clean:
 	@rm -f obj/* bin/* tst/obj/* tst/bin/*
 	@rm -rf asm pre doc/html
 
-$(EXE): obj/space_station.o obj/repair_bay.o obj/ship.o obj/main.o
+$(EXE): obj/space_station.o obj/repair_bay.o obj/ship.o obj/arg_parser.o obj/main.o
 	@printf "\033[1;32mLinking\t\t $(EXE)\033[1;0m\n"
 	@$(CXX) -o $@ $^ $(CXXFLAGS)
 	@ln -sf $(EXE) ./run
 
-tst/bin/test: tst/bin tst/obj tst/obj/maintest.o tst/obj/test_repair_bay.o tst/obj/test_ship.o tst/obj/test_random.o tst/obj/test_space_station.o obj/space_station.o obj/repair_bay.o obj/ship.o obj/main.o
+tst/bin/test: tst/bin tst/obj tst/obj/maintest.o tst/obj/test_repair_bay.o tst/obj/test_ship.o tst/obj/test_random.o tst/obj/test_space_station.o obj/space_station.o obj/repair_bay.o obj/ship.o obj/arg_parser.o obj/main.o
 	@printf "\033[1;32mLinking\t\t tst/bin/test\033[1;0m\n"
 	@rm -f tst/obj/main.o
 	@$(CXX) -o $@ tst/obj/*.o $(CXXFLAGS)
@@ -117,16 +117,29 @@ pre/ship.ii: src/ship.cpp inc/utils/algorithm.hpp inc/random.hpp inc/constants.h
 	@printf "\033[1;32mPreprocessing\t $@\033[1;0m\n"
 	@$(CXX) -E -o $@ $< -Iinc $(CXXFLAGS)
 
-obj/main.o: src/main.cpp inc/constants.h inc/space_station.h inc/constants.h inc/repair_bay.h inc/ship.h
+obj/arg_parser.o: src/arg_parser.cpp inc/arg_parser.h
+	@printf "\033[1;32mBuilding object\t $@\033[1;0m\n"
+	@$(CXX) -c -o $@ $< -Iinc $(CXXFLAGS)
+	@ln -sf ../../obj/arg_parser.o tst/obj/arg_parser.o
+
+asm/arg_parser.s: src/arg_parser.cpp inc/arg_parser.h
+	@printf "\033[1;32mGenerating\t $@\033[1;0m\n"
+	@$(CXX) -S -o $@ $< -Iinc $(CXXFLAGS)
+
+pre/arg_parser.ii: src/arg_parser.cpp inc/arg_parser.h
+	@printf "\033[1;32mPreprocessing\t $@\033[1;0m\n"
+	@$(CXX) -E -o $@ $< -Iinc $(CXXFLAGS)
+
+obj/main.o: src/main.cpp inc/arg_parser.h inc/constants.h inc/space_station.h inc/constants.h inc/repair_bay.h inc/ship.h
 	@printf "\033[1;32mBuilding object\t $@\033[1;0m\n"
 	@$(CXX) -c -o $@ $< -Iinc $(CXXFLAGS)
 	@ln -sf ../../obj/main.o tst/obj/main.o
 
-asm/main.s: src/main.cpp inc/constants.h inc/space_station.h inc/constants.h inc/repair_bay.h inc/ship.h
+asm/main.s: src/main.cpp inc/arg_parser.h inc/constants.h inc/space_station.h inc/constants.h inc/repair_bay.h inc/ship.h
 	@printf "\033[1;32mGenerating\t $@\033[1;0m\n"
 	@$(CXX) -S -o $@ $< -Iinc $(CXXFLAGS)
 
-pre/main.ii: src/main.cpp inc/constants.h inc/space_station.h inc/constants.h inc/repair_bay.h inc/ship.h
+pre/main.ii: src/main.cpp inc/arg_parser.h inc/constants.h inc/space_station.h inc/constants.h inc/repair_bay.h inc/ship.h
 	@printf "\033[1;32mPreprocessing\t $@\033[1;0m\n"
 	@$(CXX) -E -o $@ $< -Iinc $(CXXFLAGS)
 

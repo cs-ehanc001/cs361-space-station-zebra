@@ -1,6 +1,8 @@
 #ifndef RANDOM_HPP
 #define RANDOM_HPP
 
+#include <algorithm>
+#include <cstddef>
 #include <ctime>
 #include <iterator>
 #include <random>
@@ -9,9 +11,9 @@
 #include "constants.h"
 #include "ship.h"
 
-inline auto random_engine() noexcept -> std::mt19937&
+inline auto random_engine() noexcept -> conf::random_engine&
 {
-  static std::mt19937 gen(static_cast<std::size_t>(time(nullptr)));
+  static conf::random_engine gen(static_cast<std::size_t>(time(nullptr)));
   return gen;
 }
 
@@ -66,8 +68,7 @@ inline auto random_select(Itr begin, const Itr end) noexcept -> Itr
   itrdiff_t size {std::distance(begin, end)};
 
   // using (size - 1) to avoid indexing out-of-bounds
-  std::uniform_int_distribution<decltype(size)> selection_dist(0,
-                                                               size - 1);
+  std::uniform_int_distribution<itrdiff_t> selection_dist(0, size - 1);
 
   std::advance(begin, selection_dist(random_engine()));
 
@@ -115,32 +116,6 @@ inline auto get_random_faction() -> ship::faction
     // 100 - 80 = 20% chance
     return ship::faction::other;
   }
-
-  /* if ( random < 50 ) { */
-
-  /*   // 50% chance */
-  /*   return ship::faction::human; */
-
-  /* } else if ( random < 65 ) { */
-
-  /*   // 65 - 50 = 50% chance */
-  /*   return ship::faction::ferengi; */
-
-  /* } else if ( random < 75 ) { */
-
-  /*   // 75 - 65 = 10% chance */
-  /*   return ship::faction::klingon; */
-
-  /* } else if ( random < 80 ) { */
-
-  /*   // 80 - 75 = 5% chance */
-  /*   return ship::faction::romulan; */
-
-  /* } else { */
-
-  /*   // 100 - 80 = 20% chance */
-  /*   return ship::faction::other; */
-  /* } */
 }
 
 #endif
