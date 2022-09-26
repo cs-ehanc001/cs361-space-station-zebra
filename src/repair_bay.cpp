@@ -34,6 +34,6 @@ auto repair_bay::step() noexcept -> bool
       return true; // ship left this time step
     }
   }
-  // repair bay did nothing this time step
+  // ship did not leave this time step
   return false;
 }
