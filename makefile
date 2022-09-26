@@ -1,4 +1,4 @@
-PROJNAME=Space_Station_Zebra
+PROJNAME=space-station-zebra
 STD=-std=c++17
 OPT=-O0
 WARN=-Wall -Wextra -pedantic -Wcast-align -Wcast-qual -Wredundant-decls -Wconversion -Wnon-virtual-dtor -Wunused -Wdouble-promotion -Wformat=2 -Wnull-dereference -Wimplicit-fallthrough -Wuninitialized -Wstrict-overflow=4 -Wold-style-cast -Wfloat-equal -Wundef -Wshadow -Wfree-nonheap-object -Wsign-conversion -Wno-multichar -Woverloaded-virtual -Wctor-dtor-privacy -Wsign-promo -Wmisleading-indentation -Wzero-as-null-pointer-constant -Wsuggest-override -Weffc++ -Wno-error=effc++ -fsanitize=address -fsanitize=leak -fsanitize=undefined -Werror
@@ -78,16 +78,16 @@ tst/bin/test: tst/bin tst/obj tst/obj/maintest.o tst/obj/test_repair_bay.o tst/o
 	@$(CXX) -o $@ tst/obj/*.o $(CXXFLAGS)
 	@ln -sf tst/bin/test ./run_tests
 
-obj/space_station.o: src/space_station.cpp inc/random.hpp inc/constants.h inc/ship.h inc/space_station.h inc/repair_bay.h
+obj/space_station.o: src/space_station.cpp inc/utils/etc.hpp inc/utils/algorithm.hpp inc/utils/metaprogramming.hpp inc/random.hpp inc/constants.h inc/ship.h inc/space_station.h inc/repair_bay.h
 	@printf "\033[1;32mBuilding object\t $@\033[1;0m\n"
 	@$(CXX) -c -o $@ $< -Iinc $(CXXFLAGS)
 	@ln -sf ../../obj/space_station.o tst/obj/space_station.o
 
-asm/space_station.s: src/space_station.cpp inc/random.hpp inc/constants.h inc/ship.h inc/space_station.h inc/repair_bay.h
+asm/space_station.s: src/space_station.cpp inc/utils/etc.hpp inc/utils/algorithm.hpp inc/utils/metaprogramming.hpp inc/random.hpp inc/constants.h inc/ship.h inc/space_station.h inc/repair_bay.h
 	@printf "\033[1;32mGenerating\t $@\033[1;0m\n"
 	@$(CXX) -S -o $@ $< -Iinc $(CXXFLAGS)
 
-pre/space_station.ii: src/space_station.cpp inc/random.hpp inc/constants.h inc/ship.h inc/space_station.h inc/repair_bay.h
+pre/space_station.ii: src/space_station.cpp inc/utils/etc.hpp inc/utils/algorithm.hpp inc/utils/metaprogramming.hpp inc/random.hpp inc/constants.h inc/ship.h inc/space_station.h inc/repair_bay.h
 	@printf "\033[1;32mPreprocessing\t $@\033[1;0m\n"
 	@$(CXX) -E -o $@ $< -Iinc $(CXXFLAGS)
 
@@ -104,16 +104,16 @@ pre/repair_bay.ii: src/repair_bay.cpp inc/repair_bay.h inc/constants.h inc/ship.
 	@printf "\033[1;32mPreprocessing\t $@\033[1;0m\n"
 	@$(CXX) -E -o $@ $< -Iinc $(CXXFLAGS)
 
-obj/ship.o: src/ship.cpp inc/utils/algorithm.hpp inc/random.hpp inc/constants.h inc/ship.h inc/ship.h
+obj/ship.o: src/ship.cpp inc/utils/algorithm.hpp inc/utils/etc.hpp inc/utils/metaprogramming.hpp inc/random.hpp inc/constants.h inc/ship.h inc/ship.h
 	@printf "\033[1;32mBuilding object\t $@\033[1;0m\n"
 	@$(CXX) -c -o $@ $< -Iinc $(CXXFLAGS)
 	@ln -sf ../../obj/ship.o tst/obj/ship.o
 
-asm/ship.s: src/ship.cpp inc/utils/algorithm.hpp inc/random.hpp inc/constants.h inc/ship.h inc/ship.h
+asm/ship.s: src/ship.cpp inc/utils/algorithm.hpp inc/utils/etc.hpp inc/utils/metaprogramming.hpp inc/random.hpp inc/constants.h inc/ship.h inc/ship.h
 	@printf "\033[1;32mGenerating\t $@\033[1;0m\n"
 	@$(CXX) -S -o $@ $< -Iinc $(CXXFLAGS)
 
-pre/ship.ii: src/ship.cpp inc/utils/algorithm.hpp inc/random.hpp inc/constants.h inc/ship.h inc/ship.h
+pre/ship.ii: src/ship.cpp inc/utils/algorithm.hpp inc/utils/etc.hpp inc/utils/metaprogramming.hpp inc/random.hpp inc/constants.h inc/ship.h inc/ship.h
 	@printf "\033[1;32mPreprocessing\t $@\033[1;0m\n"
 	@$(CXX) -E -o $@ $< -Iinc $(CXXFLAGS)
 
@@ -130,16 +130,16 @@ pre/arg_parser.ii: src/arg_parser.cpp inc/arg_parser.h
 	@printf "\033[1;32mPreprocessing\t $@\033[1;0m\n"
 	@$(CXX) -E -o $@ $< -Iinc $(CXXFLAGS)
 
-obj/main.o: src/main.cpp inc/arg_parser.h inc/constants.h inc/space_station.h inc/constants.h inc/repair_bay.h inc/ship.h
+obj/main.o: src/main.cpp inc/utils/etc.hpp inc/utils/algorithm.hpp inc/utils/metaprogramming.hpp inc/arg_parser.h inc/constants.h inc/space_station.h inc/constants.h inc/repair_bay.h inc/ship.h
 	@printf "\033[1;32mBuilding object\t $@\033[1;0m\n"
 	@$(CXX) -c -o $@ $< -Iinc $(CXXFLAGS)
 	@ln -sf ../../obj/main.o tst/obj/main.o
 
-asm/main.s: src/main.cpp inc/arg_parser.h inc/constants.h inc/space_station.h inc/constants.h inc/repair_bay.h inc/ship.h
+asm/main.s: src/main.cpp inc/utils/etc.hpp inc/utils/algorithm.hpp inc/utils/metaprogramming.hpp inc/arg_parser.h inc/constants.h inc/space_station.h inc/constants.h inc/repair_bay.h inc/ship.h
 	@printf "\033[1;32mGenerating\t $@\033[1;0m\n"
 	@$(CXX) -S -o $@ $< -Iinc $(CXXFLAGS)
 
-pre/main.ii: src/main.cpp inc/arg_parser.h inc/constants.h inc/space_station.h inc/constants.h inc/repair_bay.h inc/ship.h
+pre/main.ii: src/main.cpp inc/utils/etc.hpp inc/utils/algorithm.hpp inc/utils/metaprogramming.hpp inc/arg_parser.h inc/constants.h inc/space_station.h inc/constants.h inc/repair_bay.h inc/ship.h
 	@printf "\033[1;32mPreprocessing\t $@\033[1;0m\n"
 	@$(CXX) -E -o $@ $< -Iinc $(CXXFLAGS)
 
