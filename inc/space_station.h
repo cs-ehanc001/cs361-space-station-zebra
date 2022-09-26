@@ -7,6 +7,7 @@
 #include <queue>
 #include <string>
 #include <string_view>
+#include <vector>
 
 #include "constants.h"
 #include "repair_bay.h"
@@ -24,7 +25,7 @@ public:
 
 private:
 
-  std::array<repair_bay, conf::num_repair_bays> m_bays {};
+  std::vector<repair_bay> m_bays;
 
   // Only using a deque instead of a queue so that I can
   // print it to the output
@@ -35,8 +36,9 @@ private:
 
 public:
 
-  space_station(std::string_view name) noexcept
-      : m_bays {}
+  space_station(std::string_view name,
+                std::size_t bay_count = conf::num_repair_bays) noexcept
+      : m_bays(bay_count)
       , m_repair_queue {}
       , m_step_count {}
       , m_last_step_summary {}
