@@ -9,4 +9,9 @@ run_tests
 doc/html
 tags
 zebra_diary.txt
+CMakeCache.txt
+cmake_install.cmake
+CMakeFiles
+Makefile
+space-station-zebra
 TODO.txt
