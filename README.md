@@ -4,12 +4,13 @@
 
 Run the following commands:
 ```
-mkdir bld
-cmake -S . -B bld
-cmake --build bld
+cmake -S . -B .
+cmake --build . --parallel 4
 ```
 
-A different build directory may be used.
+A different build directory may be used if desired, but must be empty.
+There will be two binaries: `run_tests` and `space-station-zebra`.
+`run_tests` will run the tests. `space-station-zebra` will begin a simulation.
 
 ## Building Doxygen Documentation
 
@@ -25,4 +26,4 @@ See that file's page for details (or click the filename).
 
 ## Usage
 
-Run `space-station-zebra --help` for info.
+Run `./space-station-zebra --help` for info.
