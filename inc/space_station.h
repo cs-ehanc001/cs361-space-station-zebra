@@ -39,6 +39,7 @@ public:
   space_station(std::string_view name,
                 std::size_t bay_count = conf::num_repair_bays) noexcept
       : m_bays(bay_count)
+      , m_repair_queue {}
       , m_step_count {}
       , m_last_step_summary {}
       , m_name(name)
