@@ -1,10 +1,7 @@
 cmake_minimum_required(VERSION 3.22)
 
-set(PROJECT space-station-zebra)
-project(${PROJECT})
-
-file(GLOB_RECURSE SOURCE src/*.cpp)
-list(REMOVE_ITEM SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
+project(space-station-zebra)
+set(standard)
 
 
 if( CMAKE_COMPILER_IS_GNUCC )
@@ -20,15 +17,16 @@ if ( MSVC )
     # I have no access to testing MSVC compilation
 endif()
 
-
 include_directories(inc)
-add_executable(${PROJECT} "src/main.cpp" ${SOURCE})
+
+file(GLOB_RECURSE source_files src/*.cpp)
+list(REMOVE_ITEM source_files ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
+add_executable(${PROJECT_NAME} "src/main.cpp" ${source_files})
 
 
-file(GLOB_RECURSE TEST "tst/src/*.cpp")
-
-add_executable(run_tests ${SOURCE} ${TEST})
+file(GLOB_RECURSE test_files "tst/src/*.cpp")
+add_executable(run_tests ${source_files} ${test_files})
 target_include_directories(run_tests PRIVATE tst/inc)
 
-set_property(TARGET ${PROJECT} PROPERTY CXX_STANDARD 17)
-set_property(TARGET run_tests PROPERTY CXX_STANDARD 17)
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD ${standard})
+set_property(TARGET run_tests PROPERTY CXX_STANDARD ${standard})
