@@ -143,7 +143,7 @@ public:
    * If out-of-bounds, returns a default-constructed string_view
    */
   /* }}} */
-  auto arg(size_t index) const noexcept -> std::string_view;
+  [[nodiscard]] auto arg(size_t index) const noexcept -> std::string_view;
 };
 
 } // namespace ehanc

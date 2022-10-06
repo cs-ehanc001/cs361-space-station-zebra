@@ -134,7 +134,8 @@ auto test_get_total_damage() -> ehanc::test
 
   const int sample_size {5000};
 
-  const std::vector<ship> samples {[sample_size]() -> std::vector<ship> {
+  const std::vector<ship> samples {[]() -> std::vector<ship> {
+    // implicit capture of compile-time constant `sample_size`
     std::vector<ship> retval;
     retval.reserve(sample_size);
     for ( int i {0}; i < sample_size; ++i ) {

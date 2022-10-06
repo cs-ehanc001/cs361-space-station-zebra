@@ -29,9 +29,9 @@ private:
 
   // Only using a deque instead of a queue so that I can
   // print it to the output
-  std::queue<ship> m_repair_queue {};
-  std::size_t m_step_count {};
-  step_summary m_last_step_summary {};
+  std::queue<ship> m_repair_queue;
+  std::size_t m_step_count;
+  step_summary m_last_step_summary;
   std::string m_name {"Zebra"};
 
 public:
@@ -39,7 +39,6 @@ public:
   space_station(std::string_view name,
                 std::size_t bay_count = conf::num_repair_bays) noexcept
       : m_bays(bay_count)
-      , m_repair_queue {}
       , m_step_count {}
       , m_last_step_summary {}
       , m_name(name)
