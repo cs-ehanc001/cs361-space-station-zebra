@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(space-station-zebra)
+project(space-station-zebra LANGUAGES CXX)
 set(standard 17)
 
 
