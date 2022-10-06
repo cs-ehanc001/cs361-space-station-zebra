@@ -83,11 +83,6 @@ auto ship::create_damaged_part_list(ship::faction fact) noexcept
     return create_damaged_part_list_helper(
         conf::other_part_list.cbegin(), conf::other_part_list.cend(),
         conf::other_severity_min, conf::other_severity_max);
-
-  default:
-
-    // should not be reachable
-    return {};
   }
 }
 
@@ -112,8 +107,6 @@ void ship::display(std::ostream& out) const noexcept
       return "Romulan";
     case faction::other:
       return "Other";
-    default:
-      return "This message should not appear, see ship::display";
     }
   }};
 

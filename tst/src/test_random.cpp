@@ -181,8 +181,6 @@ static auto test_get_random_faction() -> ehanc::test
             return "romulan";
           case ship::faction::other:
             return "other";
-          default:
-            return "Something has gone horribly wrong";
           }
         }};
 
