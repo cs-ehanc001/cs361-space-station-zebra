@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.22)
 
 project(space-station-zebra)
-set(standard)
+set(standard 17)
 
 
 if( CMAKE_COMPILER_IS_GNUCC )
