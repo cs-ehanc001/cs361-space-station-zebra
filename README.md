@@ -8,13 +8,13 @@ cmake -S . -B .
 cmake --build . --parallel 4
 ```
 
-A different build directory may be used if desired, but must be empty.
 There will be two binaries: `run_tests` and `space-station-zebra`.
 `run_tests` will run the tests. `space-station-zebra` will begin a simulation.
 
 ## Building Doxygen Documentation
 
 Run the following command:
+
 ```
 doxygen
 ```
