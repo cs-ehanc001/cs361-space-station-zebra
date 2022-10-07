@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.13.4)
 project(space-station-zebra LANGUAGES CXX)
 set(standard 17)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 macro(sanitize)
     message("-- Using sanitizers")
     set(SANITIZERS address,leak,undefined)
