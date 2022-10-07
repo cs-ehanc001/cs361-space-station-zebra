@@ -15,4 +15,5 @@ CMakeFiles
 Makefile
 space-station-zebra
 .cache
+compile_commands.json
 TODO.txt
