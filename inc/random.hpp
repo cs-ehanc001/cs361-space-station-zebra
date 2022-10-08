@@ -31,8 +31,11 @@ inline auto get_part_count() noexcept -> int
 
   int generated {static_cast<int>(broken_part_dist(random_engine()))};
 
-  // ensure return value >= 1
-  return std::max(generated, conf::broken_part_count_min);
+  while ( generated < conf::broken_part_count_min ) {
+    generated = static_cast<int>(broken_part_dist(random_engine()));
+  }
+
+  return generated;
 }
 
 inline auto get_new_ship_count() noexcept -> int
