@@ -42,7 +42,7 @@ auto main(const int argc, const char* const* const argv) -> int
   }
 
   const bool disable_safety_cutoff {
-      [&]() { return arg_parser.boolArg("disable_safety_cutoff"); }()};
+      arg_parser.boolArg("disable_safety_cutoff")};
 
   const int steps_to_perform {
       arg_parser.intArg("steps", conf::default_time_steps)};
