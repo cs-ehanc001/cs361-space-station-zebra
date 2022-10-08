@@ -21,6 +21,9 @@ auto main(const int argc, const char* const* const argv) -> int
         << "--steps [value] : Choose number of time steps to perform "
         << "(default: " + std::to_string(conf::default_time_steps) + ")"
         << '\n'
+        << "--disable_safety_cutoff :"
+        << "Disable safety cutoff at a queue size of "
+        << conf::cutoff_queue_size << '\n'
         << "--logfile [path] : Choose path to log file" << '\n';
 
     if constexpr ( conf::print_to_console_by_default ) {
@@ -37,6 +40,9 @@ auto main(const int argc, const char* const* const argv) -> int
 
     return 0;
   }
+
+  const bool disable_safety_cutoff {
+      [&]() { return arg_parser.boolArg("disable_safety_cutoff"); }()};
 
   const int steps_to_perform {
       arg_parser.intArg("steps", conf::default_time_steps)};
@@ -86,7 +92,8 @@ auto main(const int argc, const char* const* const argv) -> int
     if ( print_to_logfile ) {
       zebra.display(fout);
     }
-    if ( zebra.queue_size() > conf::cutoff_queue_size ) {
+    if ( (!disable_safety_cutoff)
+         && (zebra.queue_size() > conf::cutoff_queue_size) ) {
       std::cout << "Queue size has exceeded cutoff of "
                 << conf::cutoff_queue_size << " ships" << '\n';
       return 1;
