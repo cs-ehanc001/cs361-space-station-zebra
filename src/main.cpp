@@ -19,9 +19,8 @@ auto main(const int argc, const char* const* const argv) -> int
         << "Space Station Zebra options:" << '\n'
         << "--help or -h : Print this help message" << '\n'
         << "--steps [value] : Choose number of time steps to perform "
-        << "(default: " + std::to_string(conf::default_time_steps) + ")"
-        << '\n'
-        << "--disable_safety_cutoff :"
+        << "(default: " << conf::default_time_steps << ")" << '\n'
+        << "--disable-safety-cutoff :"
         << "Disable safety cutoff at a queue size of "
         << conf::cutoff_queue_size << '\n'
         << "--logfile [path] : Choose path to log file" << '\n';
@@ -42,7 +41,7 @@ auto main(const int argc, const char* const* const argv) -> int
   }
 
   const bool disable_safety_cutoff {
-      arg_parser.boolArg("disable_safety_cutoff")};
+      arg_parser.boolArg("disable-safety-cutoff")};
 
   const int steps_to_perform {
       arg_parser.intArg("steps", conf::default_time_steps)};
