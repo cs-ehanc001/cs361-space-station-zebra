@@ -20,15 +20,15 @@ endmacro()
 if( CMAKE_CXX_COMPILER_ID STREQUAL "GNU" )
     message("-- Using GCC")
 
-    add_compile_options(-Wall -Wextra -pedantic -Wcast-align -Wcast-qual -Wredundant-decls -Wconversion -Wnon-virtual-dtor -Wunused -Wdouble-promotion -Wformat=2 -Wnull-dereference -Wimplicit-fallthrough -Wuninitialized -Wstrict-overflow=4 -Wold-style-cast -Wfloat-equal -Wundef -Wshadow -Wfree-nonheap-object -Wsign-conversion -Wno-multichar -Woverloaded-virtual -Wctor-dtor-privacy -Wsign-promo -Wmisleading-indentation -Wzero-as-null-pointer-constant -Wsuggest-override -Weffc++ -Wno-return-type -Wno-error=effc++ -Werror)
-    sanitize()
+    add_compile_options(-Wall -Wextra -pedantic -Wcast-align -Wcast-qual -Wredundant-decls -Wconversion -Wnon-virtual-dtor -Wunused -Wdouble-promotion -Wformat=2 -Wnull-dereference -Wimplicit-fallthrough -Wuninitialized -Wstrict-overflow=4 -Wold-style-cast -Wfloat-equal -Wundef -Wshadow -Wfree-nonheap-object -Wsign-conversion -Wno-multichar -Woverloaded-virtual -Wctor-dtor-privacy -Wsign-promo -Wmisleading-indentation -Wzero-as-null-pointer-constant -Wsuggest-override -Weffc++ -Wno-return-type)
+    # sanitize()
     optimize(0)
 
 elseif( CMAKE_CXX_COMPILER_ID STREQUAL "Clang" )
     message("-- Using Clang")
 
     add_compile_options(-Weverything -Wno-ctad-maybe-unsupported -Wno-missing-prototypes -Wno-padded -Wno-c++98-compat -Wno-c++98-compat-pedantic)
-    sanitize()
+    # sanitize()
     optimize(0)
 
 elseif ( MSVC )
